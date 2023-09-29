@@ -125,7 +125,7 @@ def create_tables():
                 intonation_id integer,
                 full_gloss varchar(200),
                 syntax varchar(200),
-                examples varchar(1024),
+                examples varchar(2024),
                 source_constr_id integer,
                 comments varchar(512),
                 PRIMARY KEY(realisation_id),
@@ -437,7 +437,7 @@ def main():
 
     c.executemany('INSERT INTO languages (language) VALUES (%s) ON CONFLICT DO NOTHING', dict_to_list(languages))
     conn.commit()
-    print(df_to_lang_list)
+    # print(df_to_lang_list)
     c.executemany('INSERT INTO formulas (formula, language_id) VALUES (%s, %s) ON CONFLICT DO NOTHING', df_to_lang_list)
     conn.commit()
 

@@ -145,7 +145,7 @@ def search_by_parameters(cursor, substring, inner_structure_type, inner_structur
                     'len_intonations': len(intonations) if intonations else 0,
                     'list_intonations': intonations if intonations else []
         }
-        print(aux_dict)
+        # print(aux_dict)
         cursor.execute("""WITH glosses
                         AS(
                             SELECT realisation_id, gloss
@@ -266,7 +266,7 @@ def result():
                                    primary_sem=pragmatics, add_sem=add_sem, speech_act=speech_act, structure=structure, intonations=intonation,
                                    lemmas=lemmas, glosses=glosses, sc_syntax='')
     aux_dict['results'] = [x[0] for x in results]
-    print(aux_dict)
+    print(f"N results: {str(len(aux_dict))}")
     cur.execute("""
             WITH glosses AS(
                 SELECT realisation_id, gloss
@@ -334,7 +334,7 @@ def result():
             """, aux_dict)
     
     results = cur.fetchall()
-    print(results)
+    # print(results)
     
     cur.execute("""
         WITH glosses AS(
