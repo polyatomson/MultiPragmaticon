@@ -266,7 +266,7 @@ def result():
                                    primary_sem=pragmatics, add_sem=add_sem, speech_act=speech_act, structure=structure, intonations=intonation,
                                    lemmas=lemmas, glosses=glosses, sc_syntax='')
     aux_dict['results'] = [x[0] for x in results]
-    # print(aux_dict)
+    print(f"N results: {str(len(aux_dict))}")
     cur.execute("""
             WITH glosses AS(
                 SELECT realisation_id, gloss
