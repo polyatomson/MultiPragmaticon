@@ -18,7 +18,7 @@ class rlist(list):
         return [el for el in self if el != element]
 
 app = Flask(__name__)
-
+#test
 
 def search_by_parameters(cursor, substring, inner_structure_type, inner_structure_subtype, languages, syntax,
                          primary_sem, add_sem, speech_act, structure, intonations, lemmas, glosses, sc_syntax):
