@@ -109,8 +109,28 @@
 {% set id = loop.index %}
 {% set optional = record['examples'] or record['Speech act 1'] or record['Speech act'] or record['Glossing'] %}
 <div class="search" style="margin-top: 40px;font-size:smaller;">
-  <div class="container-fluid">
-    <h4><b>{{ record['label'] }}</b>{%if record['Inner structure'] %} &mdash; {{record['Inner structure']}} {% endif %}</h4>
+  <div class="row container">
+    <h4><b>{{ record['label'] }}</b></h4>
+    {%if record['Pragmatics'] %}
+        <!-- Pragmatics: -->
+      <div class="grad{{loop.index % 3}}" style="color: white;text-transform: uppercase;padding-left: 10px;padding-right: 10px;margin-left: 5px; margin-bottom: auto;margin-top: auto;width: fit-content;position: relative;">
+          <b>&MediumSpace; {{record['Pragmatics']}}</b>
+      </div>
+    {% endif %}
+    {% if record['Additional semantics'] %}
+        <!-- Additional semantics: -->
+        {% for sem in record['Additional semantics']%}
+        {% if sem %}
+          <div class="grad{{loop.index % 3}}" style="color: white;padding-left: 10px;padding-right: 10px;margin-left: 5px;margin-bottom: auto;margin-top: auto; width: fit-content;position: relative;">
+            <!-- <div class="container"> -->
+              {{sem}}
+            <!-- </div> -->
+          </div>
+        {%endif %}
+        {% endfor %}
+      <!-- </div> -->
+      {% endif %}
+  </div>
     {% if optional %}
     <div class="container-fluid grey" id="main-card{{id}}" style="font-family: Arial, Helvetica, sans-serif;font-size: small;margin-top: 10px;position: relative; min-height: 80px;">
     {% else %}
@@ -134,25 +154,36 @@
         </a>
       </div>
       {% endif %}
-      {%if record['Pragmatics'] %}
-      <div class="row container-fluid" style="padding-top: 10px;">Pragmatics: <div style="text-transform: uppercase;"><b>&MediumSpace; {{record['Pragmatics']}}</b>
-        </div></div>
+      {% if record['Glossing'] %}
+      <div class="row container-fluid" style="padding-top: 10px;">
+        <table>
+          <tr>
+            <b>
+            {% for word in record['Glossing'][0][0].split() %}
+              <td style="padding-right: 5px"><b>{{word}}</b></td>
+            {% endfor %}
+            </b>
+          </tr>
+          <tr>
+          {% for gloss in record['Glossing'][0][1].split() %}
+            <td style="padding-right: 5px">{{gloss}}</td>
+          {% endfor %}
+          </tr>
+      </table>
+    </div>
       {% endif %}
-      {% if record['Additional semantics'] %}
+      
+      
+      
+      {%if record['Inner structure'] %}
       <div class="row container-fluid" style="margin-top: 5px;max-width: 93%;">
-        Additional semantics:
-        {% for sem in record['Additional semantics']%}
-        {% if sem %}
-        <div class="grad{{loop.index % 3}}" style="color: white;margin-left: 10px;margin-bottom: 5px;">
-          <div class="container">{{sem}}</div>
-        </div>
-        {%endif %}
-        {% endfor %}
+        <b>Inner structure:</b> {{record['Inner structure']}} 
       </div>
       {% endif %}
+
       <div style="padding-bottom: 10px;">
       {%if record['Intonation']%}
-      Intonation: {{record['Intonation']}}
+      <b>Intonation:</b> {{record['Intonation']}}
       {%endif%}
       </div>
     </div>
