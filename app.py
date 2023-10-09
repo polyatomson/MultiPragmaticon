@@ -266,7 +266,7 @@ def result():
                                    primary_sem=pragmatics, add_sem=add_sem, speech_act=speech_act, structure=structure, intonations=intonation,
                                    lemmas=lemmas, glosses=glosses, sc_syntax='')
     aux_dict['results'] = [x[0] for x in results]
-    print(f"N results: {str(len(aux_dict))}")
+    print(f"N results: {str(len(results))}")
     cur.execute("""
             WITH glosses AS(
                 SELECT realisation_id, gloss
@@ -405,44 +405,48 @@ def result():
     pretty_records = []
     
     for record in df:
-        df = record[1]
-
-        df = df.fillna('')
-        glossing = df['variants'].to_list()[0].split('+')
-
-        glossing = [[x.split('\n')[0], x.split('\n')[1]] for x in set(glossing)]
+        _df = record[1]
+        _df = _df.fillna('')
+        # print(f"Variants:\n{df['variants'].to_list()}")
+        glossing_preprocessed = _df['variants'].to_list()
+        # glossing_set = set(xglossing.split(''))
+        # .split('+')
+        # print(glossing_preprocessed)
+        glossing_preprocessed = [item.split('+')[0] for item in glossing_preprocessed]
+        glossing = [[x.split('\n')[0], x.split('\n')[1]] for x in set(glossing_preprocessed)]
+        # print(glossing)
         if len(glossing) == 1 and not glossing[0][1]:
             glossing = []
         
         add_sems = set()
-        for add_sem in df.additional_sem.to_list():
+        for add_sem in _df.additional_sem.to_list():
             add_sems.update(set(add_sem.split(' | ')))
         
         sas = set()
-        for sa in df.speech_act.to_list():
+        for sa in _df.speech_act.to_list():
             sas.update(set(sa.split(' | ')))
         
         sa_1s = set()
-        for sa_1 in df.speech_act_1.to_list():
+        for sa_1 in _df.speech_act_1.to_list():
             sa_1s.update(set(sa_1.split(' | ')))
         pretty_records.append(
             {
-                'label': df.label.to_list()[0],
+                'label': _df.label.to_list()[0],
                 'Glossing': glossing,
-                'Inner structure': df.inner_structure_type.to_list()[0] +\
-                                   (':' + df['inner_structure_subtype'].to_list()[0] if df['inner_structure_subtype'].to_list()[0] else ''),
-                'Language': df.language.to_list()[0],
-                'Pragmatics': df.primary_sem.to_list()[0],
+                'Inner structure': _df.inner_structure_type.to_list()[0] +\
+                                   (':' + _df['inner_structure_subtype'].to_list()[0] if _df['inner_structure_subtype'].to_list()[0] else ''),
+                'Language': _df.language.to_list()[0],
+                'Pragmatics': _df.primary_sem.to_list()[0],
                 'Additional semantics': sorted(rlist(add_sems).remove_all('')),
                 'Speech act 1': ' | '.join(sorted(rlist(sa_1s).remove_all(''))),
                 'Speech act': ' | '.join(sorted(rlist(sas).remove_all(''))),
-                'Structure': 'tripartite' if set(df.speech_act_1.to_list()) != {''} else 'bipartite' if set(df.speech_act.to_list()) != {''} else '',
-                'Intonation': ' | '.join(set(df.intonation.to_list()[0].split(' | '))),
-                'examples': ' | '.join(set(df.examples.to_list()[0].split(' | '))).replace('{', '<b>').replace('}', '</b>')
+                'Structure': 'tripartite' if set(_df.speech_act_1.to_list()) != {''} else 'bipartite' if set(_df.speech_act.to_list()) != {''} else '',
+                'Intonation': ' | '.join(set(_df.intonation.to_list()[0].split(' | '))),
+                'examples': ' | '.join(set(_df.examples.to_list()[0].split(' | '))).replace('{', '<b>').replace('}', '</b>')
             }
         )
     records = sorted(pretty_records, key=lambda x: (x['Language'], x['label']))
-    
+    # print(records[-1])
     statistics = pd.DataFrame()
     statistics['formula'] = [x['label'] for x in pretty_records]
     statistics['realisations'] = ['|'.join([x[0] for x in y['Glossing']]) for y in pretty_records]
