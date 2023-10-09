@@ -50,24 +50,47 @@ dat.columns = dat.iloc[0]
 dat = dat.iloc[1:] #setting numeric indexing
 print(dat.columns.to_list())
 
-def update_recurring_values(colname_dat: str, table_n, column_n, column_n_str: str, dat: pd.DataFrame):
+def get_unique_values_single(colname_dat, dat) -> list:
     unique_values = [text.strip() for text in dat[colname_dat].unique() if text != '']
+    return unique_values
+
+def get_unique_values_multiple(colname_dat, dat) -> list:
+    combs = [x.split('|') for x in dat[colname_dat].unique() if x != '']
+    unique_values = set([item.strip() for sublist in combs for item in sublist if item != ''])
+    unique_values = set([': '.join([part.strip() for part in v.split(':')]) for v in unique_values if ':' in v]) #to account for inconsistencies in the annotation
+    return list(unique_values)
+
+# print(get_unique_values_multiple('inner_structure', dat)[0:20])
+
+def get_new_values(unq_v_fnc, colname_dat: str, column_n, dat: pd.DataFrame) -> list:
+    unique_values = unq_v_fnc(colname_dat, dat)
     stmt = select(column_n)
     in_db = session.scalars(stmt).fetchall()
     unique_values_new = [uv for uv in unique_values if uv not in in_db]
+    return unique_values_new
+
+def update_unique_values(unique_values_new: list, table_n, column_n_str: str) -> None:
     to_db = [{column_n_str:uvn} for uvn in unique_values_new]
     if to_db != []:
          session.execute(insert(table_n), to_db)
     session.commit()
-    
+
+
 session = Session(engine)
-update_recurring_values('syntax', Syntax, Syntax.syntax, 'syntax', dat)
-update_recurring_values('cx_syntax', CxSyntax, CxSyntax.cx_syntax, 'cx_syntax', dat)
-update_recurring_values('cx_semantics', CxSemantics, CxSemantics.cx_semantics, 'cx_semantics', dat)
-update_recurring_values('intonation', Intonations, Intonations.intonation, 'intonation', dat)
-update_recurring_values('languages', Languages, Languages.language, 'language', dat)
-update_recurring_values('pragmatics', Pragmatics, Pragmatics.pragmatics, 'pragmatics', dat)
-print('x')
+new_formula = Formulas(languages = Languages(language='it'), source_constructions=SourceConstructions(construction='come Cl'), intonations=Intonations(intonation="question"), formula="come mai")
+new_formula = Formulas(languages = Languages(language='it'), source_constructions=SourceConstructions(construction='come Cl'), intonations=Intonations(intonation="question"), formula="come mai")
+session.add(new_formula)
+session.commit()
+update_unique_values(get_new_values(get_unique_values_single, 'syntax', Syntax.syntax, dat), Syntax, 'syntax')
+update_unique_values(get_new_values(get_unique_values_single, 'cx_syntax', CxSyntax.cx_syntax, dat), CxSyntax, 'cx_syntax')
+update_unique_values(get_new_values(get_unique_values_single,'cx_semantics', CxSemantics.cx_semantics, dat), CxSemantics, 'cx_semantics')
+update_unique_values(get_new_values(get_unique_values_single,'intonation', Intonations.intonation, dat), Intonations, 'intonation')
+update_unique_values(get_new_values(get_unique_values_single,'languages', Languages.language, dat), Languages, 'language')
+update_unique_values(get_new_values(get_unique_values_single,'pragmatics', Pragmatics.pragmatics, dat), Pragmatics, 'pragmatics')
+update_unique_values(get_new_values(get_unique_values_multiple, 'semantics', Semantics.semantics, dat), Semantics, 'semantics')
+
+
+     
 
 
 # con.fetchall()

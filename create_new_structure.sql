@@ -186,14 +186,14 @@ CREATE TABLE IF NOT EXISTS public.inner_structure (
 
 
 CREATE TABLE IF NOT EXISTS public.source_constructions (
-	сonstruction_id int4 NOT NULL GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1 NO CYCLE),
+	construction_id int4 NOT NULL GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1 NO CYCLE),
 	construction varchar(200) NOT NULL,
 	cx_syntax_id integer NULL,
 	cx_semantics_id integer NULL,
 	cx_intonation varchar(100) NULL,
 
 	CONSTRAINT source_constructions_construction_key UNIQUE (construction),
-	CONSTRAINT source_constructions_pkey PRIMARY KEY ("сonstruction_id"),
+	CONSTRAINT source_constructions_pkey PRIMARY KEY (construction_id),
 	CONSTRAINT cx_semantics_fk FOREIGN KEY (cx_semantics_id) REFERENCES public.cx_semantics(cx_semantics_id),
 	CONSTRAINT cx_syntax_fk FOREIGN KEY (cx_syntax_id) REFERENCES public.cx_syntax(cx_syntax_id)
 );
@@ -209,7 +209,8 @@ CREATE TABLE IF NOT EXISTS public.formulas (
 	construction_id int4 NULL,
 	intonation_id int4 NULL,
 	CONSTRAINT formulas_pkey PRIMARY KEY (formula_id),
-	CONSTRAINT construction_fk FOREIGN KEY (construction_id) REFERENCES public.source_constructions(сonstruction_id),
+	CONSTRAINT formulas_un UNIQUE (formula, language_id, construction_id)
+	CONSTRAINT construction_fk FOREIGN KEY (construction_id) REFERENCES public.source_constructions(construction_id),
 	CONSTRAINT fk_language FOREIGN KEY (language_id) REFERENCES public.languages(language_id) ON DELETE SET NULL,
 	CONSTRAINT intionation_fk FOREIGN KEY (intonation_id) REFERENCES public.intonations(intonation_id)
 );
