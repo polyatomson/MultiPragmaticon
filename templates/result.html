@@ -212,7 +212,9 @@
           <b>Examples:</b> <br>
           {% for example in record['examples'].split('|') %}
           <div style="margin-bottom: 8px;">
+          <em> 
             {{example|safe}}
+          </em>
           </div>
           {% endfor %}
         </div>

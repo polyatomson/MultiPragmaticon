@@ -264,7 +264,7 @@ def main():
                 '1kyesqJ3k2WFmygRq7R1iL2ZC7yM-XNQ5Shye2rdEAL0/' \
                 'edit#gid=67313858'
     wb = gc.open_by_url(sheet_url)
-    sheet = wb.worksheet('Лист1')
+    sheet = wb.worksheet('main')
 
     df = pd.DataFrame(sheet.get_all_values())
     df.columns = df.iloc[0]
