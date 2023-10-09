@@ -168,6 +168,14 @@ CREATE TABLE IF NOT EXISTS public.glosses (
 	CONSTRAINT gloss_type_fk FOREIGN KEY (gloss_type_id) REFERENCES public.gloss_types(gloss_type_id)
 );
 
+CREATE TABLE IF NOT EXISTS public.glossing (
+	glossing_id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
+	gloss_id int4 NOT NULL,
+	constituent varchar NOT NULL,
+	CONSTRAINT glossing_pk PRIMARY KEY (glossing_id),
+	CONSTRAINT glossing_un UNIQUE (gloss_id,"element"),
+	CONSTRAINT gloss_fk FOREIGN KEY (gloss_id) REFERENCES public.glosses(gloss_id)
+);
 
 
 
@@ -252,9 +260,9 @@ CREATE TABLE IF NOT EXISTS public.variations (
 
 
 CREATE TABLE IF NOT EXISTS public.formula2inner_structure (
+	formula2inner_structure_id int4 NOT NULL GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1 NO CYCLE),
 	formula_id int4 NOT NULL,
 	inner_structure_id int4 NOT NULL,
-	formula2inner_structure_id int4 NOT NULL GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1 NO CYCLE),
 	CONSTRAINT formula2inner_structure_pk PRIMARY KEY (formula2inner_structure_id),
 	CONSTRAINT formula2inner_structure_un UNIQUE (formula_id, inner_structure_id),
 	CONSTRAINT formula_fk FOREIGN KEY (formula_id) REFERENCES public.formulas(formula_id),
@@ -262,7 +270,7 @@ CREATE TABLE IF NOT EXISTS public.formula2inner_structure (
 );
 
 
-
+-- DROP TABLE public.frame2var;
 
 
 CREATE TABLE IF NOT EXISTS public.frame2var (
@@ -270,7 +278,7 @@ CREATE TABLE IF NOT EXISTS public.frame2var (
 	frame_id int4 NOT NULL,
 	variation_id int4 NULL,
 	example_id int4 NULL,
-	"comment" varchar NULL,
+	commentary varchar NULL,
 	reference_id int4 NULL,
 	CONSTRAINT real2var_pk PRIMARY KEY (frame2var_id),
 	CONSTRAINT example_fk FOREIGN KEY (example_id) REFERENCES public.examples(example_id),
@@ -290,13 +298,14 @@ CREATE TABLE IF NOT EXISTS public.variation2lemma (
 	CONSTRAINT variation2lemma_fk FOREIGN KEY (variation_id) REFERENCES public.variations(variation_id)
 );
 
+-- DROP TABLE public.variation2gloss;
 
-CREATE TABLE IF NOT EXISTS public.variation2gloss (
-	variation2gloss_id int4 NOT NULL GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1 NO CYCLE),
+CREATE TABLE IF NOT EXISTS public.variation2glossing (
+	variation2glossing_id int4 NOT NULL GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1 NO CYCLE),
 	variation_id int4 NOT NULL,
-	gloss_id int4 NULL,
-	CONSTRAINT realisation2gloss_pkey PRIMARY KEY (variation2gloss_id),
-	CONSTRAINT fk_gloss FOREIGN KEY (gloss_id) REFERENCES public.glosses(gloss_id) ON DELETE SET NULL,
+	glossing_id int4 NULL,
+	CONSTRAINT realisation2gloss_pkey PRIMARY KEY (variation2glossing_id),
+	CONSTRAINT fk_gloss FOREIGN KEY (glossing_id) REFERENCES public.glossing(glossing_id) ON DELETE SET NULL,
 	CONSTRAINT fk_variation FOREIGN KEY (variation_id) REFERENCES public.variations(variation_id) ON DELETE CASCADE
 );
 
