@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS public.examples (
 
 CREATE TABLE IF NOT EXISTS public.gloss_types (
 	gloss_type_id int4 NOT NULL GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1 NO CYCLE),
-	gloss_type varchar NOT NULL,
+	gloss_type varchar,
 	CONSTRAINT gloss_types_pk PRIMARY KEY (gloss_type_id),
 	CONSTRAINT gloss_types_un UNIQUE (gloss_type)
 );
@@ -149,8 +149,9 @@ CREATE TABLE IF NOT EXISTS public.frames (
 
 CREATE TABLE IF NOT EXISTS public.gloss_class (
 	gloss_class_id int4 NOT NULL GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1 NO CYCLE),
-	gloss_class varchar NOT NULL,
-	CONSTRAINT gloss_class_pk PRIMARY KEY (gloss_class_id)
+	gloss_class varchar,
+	CONSTRAINT gloss_class_pk PRIMARY KEY (gloss_class_id),
+	CONSTRAINT gloss_class_un UNIQUE (gloss_class)
 );
 
 
@@ -160,9 +161,9 @@ CREATE TABLE IF NOT EXISTS public.gloss_class (
 CREATE TABLE IF NOT EXISTS public.glosses (
 	gloss_id int4 NOT NULL GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1 NO CYCLE),
 	gloss varchar(50) NOT NULL,
-	gloss_class_id int4 NULL,
 	gloss_type_id int4 NULL,
-	CONSTRAINT glosses_gloss_key UNIQUE (gloss),
+	gloss_class_id int4 NULL,
+	CONSTRAINT glosses_gloss_key UNIQUE (gloss, gloss_type_id),
 	CONSTRAINT glosses_pkey PRIMARY KEY (gloss_id),
 	CONSTRAINT gloss_class_fk FOREIGN KEY (gloss_class_id) REFERENCES public.gloss_class(gloss_class_id),
 	CONSTRAINT gloss_type_fk FOREIGN KEY (gloss_type_id) REFERENCES public.gloss_types(gloss_type_id)
@@ -171,14 +172,37 @@ CREATE TABLE IF NOT EXISTS public.glosses (
 CREATE TABLE IF NOT EXISTS public.glossing (
 	glossing_id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
 	gloss_id int4 NOT NULL,
-	constituent varchar NOT NULL,
+	marker varchar NOT NULL,
+	language_id integer NOT NULL,
 	CONSTRAINT glossing_pk PRIMARY KEY (glossing_id),
-	CONSTRAINT glossing_un UNIQUE (gloss_id,"element"),
-	CONSTRAINT gloss_fk FOREIGN KEY (gloss_id) REFERENCES public.glosses(gloss_id)
+	CONSTRAINT glossing_un UNIQUE (marker, gloss_id, language_id),
+	CONSTRAINT gloss_fk FOREIGN KEY (gloss_id) REFERENCES public.glosses(gloss_id),
+	CONSTRAINT language_fk FOREIGN KEY (language_id) REFERENCES public.languages(language_id)
 );
 
 
+CREATE TABLE IF NOT EXISTS public.constituents (
+	constituent_id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
+	constituent varchar NOT NULL,
+	glossed varchar NOT NULL,
+	language_id integer,
+	lemma_id integer,
+	CONSTRAINT constituents_pk PRIMARY KEY (constituent_id),
+	CONSTRAINT constituents_un UNIQUE (constituent, language_id, lemma_id),
+	CONSTRAINT language_fk FOREIGN KEY (language_id) REFERENCES public.languages(language_id),
+	CONSTRAINT lemma_fk FOREIGN KEY (lemma_id) REFERENCES public.lemmas(lemma_id)
+);
 
+
+CREATE TABLE IF NOT EXISTS public.constituents2glossing (
+	constituents2glossing_id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
+	glossing_id int4 NOT NULL,
+	constituent_id integer NOT NULL,
+	CONSTRAINT constituents2glossing_pk PRIMARY KEY (constituents2glossing_id),
+	CONSTRAINT constituents2glossing_un UNIQUE (glossing_id, constituent_id),
+	CONSTRAINT glossing_fk FOREIGN KEY (glossing_id) REFERENCES public.glossing(glossing_id),
+	CONSTRAINT constituent_fk FOREIGN KEY (constituent_id) REFERENCES public.constituents(constituent_id)
+);
 
 CREATE TABLE IF NOT EXISTS public.inner_structure (
 	inner_structure_id int4 NOT NULL GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1 NO CYCLE),
@@ -217,7 +241,7 @@ CREATE TABLE IF NOT EXISTS public.formulas (
 	construction_id int4 NULL,
 	intonation_id int4 NULL,
 	CONSTRAINT formulas_pkey PRIMARY KEY (formula_id),
-	CONSTRAINT formulas_un UNIQUE (formula, language_id, construction_id)
+	CONSTRAINT formulas_un UNIQUE (formula, language_id, construction_id),
 	CONSTRAINT construction_fk FOREIGN KEY (construction_id) REFERENCES public.source_constructions(construction_id),
 	CONSTRAINT fk_language FOREIGN KEY (language_id) REFERENCES public.languages(language_id) ON DELETE SET NULL,
 	CONSTRAINT intionation_fk FOREIGN KEY (intonation_id) REFERENCES public.intonations(intonation_id)
@@ -288,24 +312,14 @@ CREATE TABLE IF NOT EXISTS public.frame2var (
 );
 
 
-
-CREATE TABLE IF NOT EXISTS public.variation2lemma (
-	variation2lemma_id int4 NOT NULL GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1 NO CYCLE),
-	variation_id int4 NOT NULL,
-	lemma_id int4 NOT NULL,
-	CONSTRAINT realisation2lemma_pk PRIMARY KEY (variation2lemma_id),
-	CONSTRAINT fk_lemma FOREIGN KEY (lemma_id) REFERENCES public.lemmas(lemma_id) ON DELETE SET NULL,
-	CONSTRAINT variation2lemma_fk FOREIGN KEY (variation_id) REFERENCES public.variations(variation_id)
-);
-
 -- DROP TABLE public.variation2gloss;
 
-CREATE TABLE IF NOT EXISTS public.variation2glossing (
-	variation2glossing_id int4 NOT NULL GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1 NO CYCLE),
+CREATE TABLE IF NOT EXISTS public.variation2constituents (
+	variation2constituent_id int4 NOT NULL GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1 NO CYCLE),
 	variation_id int4 NOT NULL,
-	glossing_id int4 NULL,
-	CONSTRAINT realisation2gloss_pkey PRIMARY KEY (variation2glossing_id),
-	CONSTRAINT fk_gloss FOREIGN KEY (glossing_id) REFERENCES public.glossing(glossing_id) ON DELETE SET NULL,
+	constituent_id int4 NULL,
+	CONSTRAINT realisation2gloss_pkey PRIMARY KEY (variation2constituent_id),
+	CONSTRAINT fk_gloss FOREIGN KEY (constituent_id) REFERENCES public.constituents(constituent_id) ON DELETE SET NULL,
 	CONSTRAINT fk_variation FOREIGN KEY (variation_id) REFERENCES public.variations(variation_id) ON DELETE CASCADE
 );
 
