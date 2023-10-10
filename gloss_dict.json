@@ -1,0 +1,2529 @@
+{
+  "glosses": [
+    {
+      "gloss": "miracle",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "put",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "background",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "price",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "also",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "which",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "cholera",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "everyone",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "think",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "2sg(2pl)",
+      "type": "grammatical",
+      "class": "person_number"
+    },
+    {
+      "gloss": "understand",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "important",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "any",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "auxfut",
+      "type": "grammatical",
+      "class": "tense"
+    },
+    {
+      "gloss": "lead",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "yes",
+      "type": "lexical",
+      "class": "answering_particle"
+    },
+    {
+      "gloss": "big",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "chance",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "nsg",
+      "type": "grammatical",
+      "class": "gender_number"
+    },
+    {
+      "gloss": "about",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "quiet",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "joke",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "sorely",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "baloney",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "different",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "again",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "story",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "curse",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "something",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "good",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "suffice",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "order",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "difference",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "okay",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "time",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "foc",
+      "type": "grammatical",
+      "class": "particle_semantics"
+    },
+    {
+      "gloss": "1sg",
+      "type": "lexical",
+      "class": "person_number"
+    },
+    {
+      "gloss": "end",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "healthy",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "wait",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "dir",
+      "type": "grammatical",
+      "class": "case"
+    },
+    {
+      "gloss": "hold",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "subj",
+      "type": "grammatical",
+      "class": "mood"
+    },
+    {
+      "gloss": "relevance",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "this",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "essence",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "must",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "talk",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "certainty",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "ridiculous",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "quite",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "ins",
+      "type": "grammatical",
+      "class": "case"
+    },
+    {
+      "gloss": "sg",
+      "type": "grammatical",
+      "class": "number"
+    },
+    {
+      "gloss": "worry",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "keep",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "ptcl",
+      "type": "grammatical",
+      "class": "POS"
+    },
+    {
+      "gloss": "straight",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "gen",
+      "type": "grammatical",
+      "class": "case"
+    },
+    {
+      "gloss": "repentance",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "answer",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "like",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "I",
+      "type": "lexical",
+      "class": "pronoun"
+    },
+    {
+      "gloss": "become",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "blabber",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "far",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "holy",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "int",
+      "type": "grammatical",
+      "class": null
+    },
+    {
+      "gloss": "judge",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "worth",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "condition",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "neither",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "wrong",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "peace",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "listen",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "where",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "nom",
+      "type": "grammatical",
+      "class": "case"
+    },
+    {
+      "gloss": "dangerous",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "deix",
+      "type": "grammatical",
+      "class": "particle_semantics"
+    },
+    {
+      "gloss": "cover",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "fuck",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "normal",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "do",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "certain",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "bullshit",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "(prt)",
+      "type": "grammatical",
+      "class": "POS"
+    },
+    {
+      "gloss": "beg",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "need",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "cannot",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "excess",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "imp",
+      "type": "grammatical",
+      "class": "mood"
+    },
+    {
+      "gloss": "to",
+      "type": "lexical",
+      "class": "preposition"
+    },
+    {
+      "gloss": "possibility",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "conj",
+      "type": "grammatical",
+      "class": ""
+    },
+    {
+      "gloss": "dispute",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "sprl",
+      "type": "grammatical",
+      "class": "degree"
+    },
+    {
+      "gloss": "impf",
+      "type": "grammatical",
+      "class": "tense"
+    },
+    {
+      "gloss": "loc",
+      "type": "grammatical",
+      "class": "case"
+    },
+    {
+      "gloss": "nohow",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "now",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "from_now_on",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "tharefore",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "method",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "whole",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "pl",
+      "type": "grammatical",
+      "class": "number"
+    },
+    {
+      "gloss": "mean",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "pay_attention",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "before",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "difficult",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "day",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "agreeing",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "honor",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "luck",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "theory",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "who",
+      "type": "lexical",
+      "class": "interrogative"
+    },
+    {
+      "gloss": "never",
+      "type": "lexical",
+      "class": "NPI"
+    },
+    {
+      "gloss": "msg",
+      "type": "grammatical",
+      "class": "gender_number"
+    },
+    {
+      "gloss": "easy",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "contop",
+      "type": "grammatical",
+      "class": "particle_semantics"
+    },
+    {
+      "gloss": "arch",
+      "type": "other",
+      "class": null
+    },
+    {
+      "gloss": "problem",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "joy",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "interj",
+      "type": "grammatical",
+      "class": "POS"
+    },
+    {
+      "gloss": "one",
+      "type": "lexical",
+      "class": "numeral"
+    },
+    {
+      "gloss": "himself",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "forbid",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "stop",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "wise",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "flatter",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "shit",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "reason",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "abl",
+      "type": "grammatical",
+      "class": "case"
+    },
+    {
+      "gloss": "roll",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "mother",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "intj",
+      "type": "grammatical",
+      "class": "POS"
+    },
+    {
+      "gloss": "3sg",
+      "type": "grammatical",
+      "class": "person_number"
+    },
+    {
+      "gloss": "mislead",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "little",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "avoir",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "give",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "sound",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "speech",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "proh",
+      "type": "grammatical",
+      "class": "mood"
+    },
+    {
+      "gloss": "pastp",
+      "type": "grammatical",
+      "class": "tense"
+    },
+    {
+      "gloss": "cond",
+      "type": "grammatical",
+      "class": "mood"
+    },
+    {
+      "gloss": "dem",
+      "type": "grammatical",
+      "class": "particle_semantics"
+    },
+    {
+      "gloss": "if",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "corpse",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "treasure",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "pred",
+      "type": "grammatical",
+      "class": "verb_form"
+    },
+    {
+      "gloss": "2pl",
+      "type": "grammatical",
+      "class": "person_number"
+    },
+    {
+      "gloss": "exactly",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "dem2",
+      "type": "grammatical",
+      "class": "particle_semantics"
+    },
+    {
+      "gloss": "vbz",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "add",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "word",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "possible",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "pron",
+      "type": "grammatical",
+      "class": "POS"
+    },
+    {
+      "gloss": "under",
+      "type": "lexical",
+      "class": "preposition"
+    },
+    {
+      "gloss": "world",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "well",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "the",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "miss",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "anything",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "fixable",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "even",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "go",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "with",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "enim",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "psr",
+      "type": "grammatical",
+      "class": "tense"
+    },
+    {
+      "gloss": "meaning",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "dear",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "how",
+      "type": "lexical",
+      "class": "interrogative"
+    },
+    {
+      "gloss": "get",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "complaint",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "refuse",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "surely",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "view",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "complicate",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "happen",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "forget",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "oblg",
+      "type": "grammatical",
+      "class": "mood"
+    },
+    {
+      "gloss": "hard",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "concern",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "we",
+      "type": "lexical",
+      "class": "pronoun"
+    },
+    {
+      "gloss": "God's",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "allow",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "woman",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "hear",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "so",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "there",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "really",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "such",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "mock",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "option",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "truth",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "art",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "fit",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "it",
+      "type": "lexical",
+      "class": "pronoun"
+    },
+    {
+      "gloss": "exclude",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "reduc\ngledati",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "theme",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "scary",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "suppose",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "take",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "aux",
+      "type": "grammatical",
+      "class": "POS"
+    },
+    {
+      "gloss": "every",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "devil",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "today",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "neg",
+      "type": "grammatical",
+      "class": null
+    },
+    {
+      "gloss": "fun",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "recieve",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "great",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "by",
+      "type": "lexical",
+      "class": "preposition"
+    },
+    {
+      "gloss": "pleasure",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "stroke",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "n",
+      "type": "grammatical",
+      "class": "gender"
+    },
+    {
+      "gloss": "thing",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "possib",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "refl",
+      "type": "grammatical",
+      "class": null
+    },
+    {
+      "gloss": "rather",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "surprising",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "poss3",
+      "type": "grammatical",
+      "class": null
+    },
+    {
+      "gloss": "genre",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "prs",
+      "type": "grammatical",
+      "class": "tense"
+    },
+    {
+      "gloss": "count",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "head",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "than",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "case",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "me",
+      "type": "lexical",
+      "class": "pronoun"
+    },
+    {
+      "gloss": "Gracious",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "all",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "they",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "advice",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "everything",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "that`s",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "hope",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "oh",
+      "type": "lexical",
+      "class": "interjection"
+    },
+    {
+      "gloss": "link",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "always",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "ever",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "shame",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "surprise",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "grind",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "yours",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "look",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "pass",
+      "type": "grammatical",
+      "class": "voice"
+    },
+    {
+      "gloss": "devil2",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "fool",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "serious",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "not",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "burn",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "fall",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "use",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "your",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "opt",
+      "type": "grammatical",
+      "class": "mood"
+    },
+    {
+      "gloss": "sup",
+      "type": "grammatical",
+      "class": "degree"
+    },
+    {
+      "gloss": "reduc",
+      "type": "other",
+      "class": null
+    },
+    {
+      "gloss": "SG",
+      "type": "grammatical",
+      "class": "number"
+    },
+    {
+      "gloss": "necessary",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "probably",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "cncs2",
+      "type": "grammatical",
+      "class": "particle_semantics"
+    },
+    {
+      "gloss": "too",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "relax",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "turn",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "funny",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "naturally",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "accept",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "emph",
+      "type": "grammatical",
+      "class": "particle_semantics"
+    },
+    {
+      "gloss": "prox",
+      "type": "grammatical",
+      "class": "particle_semantics"
+    },
+    {
+      "gloss": "GEN",
+      "type": "grammatical",
+      "class": "case"
+    },
+    {
+      "gloss": "lord",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "q",
+      "type": "grammatical",
+      "class": "interrogative"
+    },
+    {
+      "gloss": "stupid",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "empty",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "from",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "tongue",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "beat",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "life",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "famous",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "saint",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "on",
+      "type": "lexical",
+      "class": "preposition"
+    },
+    {
+      "gloss": "more",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "other",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "none",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "may",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "hand",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "obstacle",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "lie",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "at_all",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "for",
+      "type": "lexical",
+      "class": "preposition"
+    },
+    {
+      "gloss": "sorry",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "acc",
+      "type": "grammatical",
+      "class": "case"
+    },
+    {
+      "gloss": "fsg",
+      "type": "grammatical",
+      "class": "gender_number"
+    },
+    {
+      "gloss": "spit",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "ask",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "prs2sg",
+      "type": "grammatical",
+      "class": null
+    },
+    {
+      "gloss": "try",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "you",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "can",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "thought",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "ptcp",
+      "type": "grammatical",
+      "class": "verb_form"
+    },
+    {
+      "gloss": "bosh",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "comp",
+      "type": "grammatical",
+      "class": "degree"
+    },
+    {
+      "gloss": "pity",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "if_only",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "very",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "let's",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "2sg",
+      "type": "grammatical",
+      "class": "person_number"
+    },
+    {
+      "gloss": "cncs1",
+      "type": "grammatical",
+      "class": "particle_semantics"
+    },
+    {
+      "gloss": "light",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "pts",
+      "type": "grammatical",
+      "class": "verb_form"
+    },
+    {
+      "gloss": "protest",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "what",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "cmpr",
+      "type": "grammatical",
+      "class": "degree"
+    },
+    {
+      "gloss": "inst",
+      "type": "grammatical",
+      "class": "case"
+    },
+    {
+      "gloss": "PRS",
+      "type": "grammatical",
+      "class": "tense"
+    },
+    {
+      "gloss": "qp",
+      "type": "grammatical",
+      "class": "interrogative"
+    },
+    {
+      "gloss": "prep",
+      "type": "grammatical",
+      "class": "POS"
+    },
+    {
+      "gloss": "here",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "soon",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "lot",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "conversation",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "speak",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "start",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "fut",
+      "type": "grammatical",
+      "class": "tense"
+    },
+    {
+      "gloss": "force",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "dire",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "thank",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "ger",
+      "type": "grammatical",
+      "class": "verb_form"
+    },
+    {
+      "gloss": "and",
+      "type": "lexical",
+      "class": "conjunction"
+    },
+    {
+      "gloss": "prt",
+      "type": "grammatical",
+      "class": "POS"
+    },
+    {
+      "gloss": "obviously",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "say",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "although",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "unlikely",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "absolutely",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "yet",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "resentment",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "m",
+      "type": "grammatical",
+      "class": "gender"
+    },
+    {
+      "gloss": "come",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "precisely",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "occasion",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "when",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "money",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "save",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "completely",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "simple",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "please",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "carit",
+      "type": "grammatical",
+      "class": null
+    },
+    {
+      "gloss": "soul",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "partititve",
+      "type": "grammatical",
+      "class": null
+    },
+    {
+      "gloss": "have",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "that's",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "i",
+      "type": "lexical",
+      "class": "pronoun"
+    },
+    {
+      "gloss": "connection",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "she",
+      "type": "lexical",
+      "class": "pronoun"
+    },
+    {
+      "gloss": "drive",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "news",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "believe",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "god",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "chew",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "incident",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "crazy",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "nonsense",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "real",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "throw",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "seriously",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "pray",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "nothing",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "laugh",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "smear",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "jibberish",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "but",
+      "type": "lexical",
+      "class": "conjunction"
+    },
+    {
+      "gloss": "business",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "measure",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "no",
+      "type": "lexical",
+      "class": "answering_particle"
+    },
+    {
+      "gloss": "indeed",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "issue",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "person",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "near",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "fear",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "idea",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "top",
+      "type": "grammatical",
+      "class": "particle_semantics"
+    },
+    {
+      "gloss": "suddenly",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "caus",
+      "type": "grammatical",
+      "class": null
+    },
+    {
+      "gloss": "effect",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "av",
+      "type": "lexical",
+      "class": "verb_form"
+    },
+    {
+      "gloss": "short",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "already",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "enough",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "def",
+      "type": "grammatical",
+      "class": "definiteness"
+    },
+    {
+      "gloss": "truthful",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "comprehension",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "doubt",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "defend",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "nobody",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "topic",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "just",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "see",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "appearance",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "f",
+      "type": "grammatical",
+      "class": "gender"
+    },
+    {
+      "gloss": "God",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "red",
+      "type": "other",
+      "class": null
+    },
+    {
+      "gloss": "exact",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "ptc",
+      "type": "grammatical",
+      "class": null
+    },
+    {
+      "gloss": "1pl",
+      "type": "grammatical",
+      "class": "person_number"
+    },
+    {
+      "gloss": "clear",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "sure",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "cow",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "brother",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "pst",
+      "type": "grammatical",
+      "class": "tense"
+    },
+    {
+      "gloss": "wave",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "course",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "cncs",
+      "type": "grammatical",
+      "class": "particle_semantics"
+    },
+    {
+      "gloss": "demon",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "(only)",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "3SG",
+      "type": "grammatical",
+      "class": "person_number"
+    },
+    {
+      "gloss": "of",
+      "type": "lexical",
+      "class": "preposition"
+    },
+    {
+      "gloss": "mercy",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "poss",
+      "type": "grammatical",
+      "class": null
+    },
+    {
+      "gloss": "imagine",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "obvious",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "right",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "generally",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "mistake",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "tell",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "cop",
+      "type": "grammatical",
+      "class": "POS"
+    },
+    {
+      "gloss": "inf",
+      "type": "grammatical",
+      "class": "verb_form"
+    },
+    {
+      "gloss": "anyway",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "why",
+      "type": "lexical",
+      "class": "interrogative"
+    },
+    {
+      "gloss": "finally",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "blabber2",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "true",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "my",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "hide",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "creature",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "adjr",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "dem1",
+      "type": "grammatical",
+      "class": "particle_semantics"
+    },
+    {
+      "gloss": "voc",
+      "type": "grammatical",
+      "class": "case"
+    },
+    {
+      "gloss": "fact",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "cut",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "agree",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "trouble",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "arrive",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "exactly2",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "he",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "two",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "without",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "hello",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "question",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "dem3",
+      "type": "grammatical",
+      "class": "particle_semantics"
+    },
+    {
+      "gloss": "extraordinary",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "mind",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "tale",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "find",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "value",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "assume",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "inconspicuous",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "few",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "bet",
+      "type": "lexical",
+      "class": "conjunction"
+    },
+    {
+      "gloss": "cont",
+      "type": "lexical",
+      "class": "tense"
+    },
+    {
+      "gloss": "come_out",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "hey",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "be",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "pres",
+      "type": "grammatical",
+      "class": "tense"
+    },
+    {
+      "gloss": "special",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "gledati",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "want",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "cost",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "know",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "that",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "possibly",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "only",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "similar",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "sbst",
+      "type": "grammatical",
+      "class": "word_formation"
+    },
+    {
+      "gloss": "new",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "at",
+      "type": "lexical",
+      "class": "preposition"
+    },
+    {
+      "gloss": "dist",
+      "type": "grammatical",
+      "class": "particle_semantics"
+    },
+    {
+      "gloss": "baptized",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "dat",
+      "type": "grammatical",
+      "class": "case"
+    },
+    {
+      "gloss": "verb",
+      "type": "grammatical",
+      "class": "word_formation"
+    },
+    {
+      "gloss": "dream",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "invent",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "point",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "(pl)",
+      "type": "grammatical",
+      "class": "number"
+    },
+    {
+      "gloss": "another",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "kind",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "auxcond",
+      "type": "grammatical",
+      "class": "tense"
+    },
+    {
+      "gloss": "way",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "adv",
+      "type": "grammatical",
+      "class": "word_formation"
+    },
+    {
+      "gloss": "blabber1",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "a",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "hort",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "contr",
+      "type": "grammatical",
+      "class": "particle_semantics"
+    },
+    {
+      "gloss": "importance",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "care",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "screw",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "in",
+      "type": "lexical",
+      "class": "preposition"
+    },
+    {
+      "gloss": "part",
+      "type": "grammatical",
+      "class": "POS"
+    },
+    {
+      "gloss": "touch",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "compliment",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "juxt",
+      "type": "grammatical",
+      "class": "particle_semantics"
+    },
+    {
+      "gloss": "against",
+      "type": "lexical",
+      "class": "preposition"
+    },
+    {
+      "gloss": "gracious",
+      "type": "lexical",
+      "class": null
+    },
+    {
+      "gloss": "god's",
+      "type": "lexical",
+      "class": null
+    }
+  ]
+}
