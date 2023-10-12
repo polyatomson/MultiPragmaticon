@@ -207,7 +207,7 @@ CREATE TABLE IF NOT EXISTS public.constituents2glossing (
 CREATE TABLE IF NOT EXISTS public.inner_structure (
 	inner_structure_id int4 NOT NULL GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1 NO CYCLE),
 	inner_structure_type_id int4 NOT NULL,
-	inner_structure_subtype_id int4 NOT NULL,
+	inner_structure_subtype_id int4 NULL,
 	CONSTRAINT inner_structure_pk PRIMARY KEY (inner_structure_id),
 	CONSTRAINT inner_structure_subtype_fk FOREIGN KEY (inner_structure_subtype_id) REFERENCES public.inner_structure_subtypes(inner_structure_subtype_id),
 	CONSTRAINT inner_structure_type_fk FOREIGN KEY (inner_structure_type_id) REFERENCES public.inner_structure_types(inner_structure_type_id)

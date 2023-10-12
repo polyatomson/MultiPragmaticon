@@ -10,7 +10,6 @@ from oauth2client.service_account import ServiceAccountCredentials
 from conf import DBNAME, USER, PASSWORD, HOST, DATAURL
 import urllib
 import pickle
-# import psycopg2
 import json
 import time
 
@@ -51,19 +50,7 @@ base = create_tables()
 # shortening the table names
 Syntax, CxSyntax, CxSemantics, Examples, GlossTypes, InnerStructureSubtypes, InnerStructureTypes, Intonations, Languages, Lemmas, Pragmatics, Literature, Semantics, Speech_acts, Frames, GlossClass, Glosses, InnerStructure, SourceConstructions, Formulas, Frame2SpeechActs, Variations, Formula2InnerStructure, Frame2Var, Variation2Constituents, Glossing, Constituents, Constituents2Glossing = base.classes.Syntax, base.classes.CxSyntax, base.classes.CxSemantics, base.classes.Examples, base.classes.GlossTypes, base.classes.InnerStructureSubtypes, base.classes.InnerStructureTypes, base.classes.Intonations, base.classes.Languages, base.classes.Lemmas, base.classes.Pragmatics, base.classes.Literature, base.classes.Semantics, base.classes.SpeechActs, base.classes.Frames, base.classes.GlossClass, base.classes.Glosses, base.classes.InnerStructure, base.classes.SourceConstructions, base.classes.Formulas, base.classes.Frame2SpeechActs, base.classes.Variations, base.classes.Formula2InnerStructure, base.classes.Frame2Var, base.classes.Variation2Constituents, base.classes.Glossing, base.classes.Constituents, base.classes.Constituents2Glossing
 
-# # Pickled the dataframe not to send API requests all the time
-# dat = get_table()
-# with open('pickled_df', 'wb') as f:
-#      pickle.dump(dat, f)
 
-with open('pickled_df', 'rb') as f:
-     dat: pd.DataFrame = pickle.load(f)
-
-dat.columns = dat.iloc[0]
-dat = dat.iloc[1:] #setting numeric indexing
-print(dat.columns.to_list())
-
-row_count = len(dat.values)
 
 def validate_row(row_n: int, dat: pd.DataFrame) -> None:
     if dat.df[row_n].strip() == '' or dat.variation[row_n].strip() == '' or dat.languages[row_n].strip() == '':
@@ -364,46 +351,109 @@ def create_var2const(var, consts: list):
             session.add(var2const)
             session.commit()
 
-
-# # ready part for creating all the tables with formal characteristics:
-# gloss_types, gloss_classes = import_gloss_dict() # import the glosses annotations
-# lang = create_lang(dat.languages[1]) # create/retrieve the language
-# constr = create_construction(dat.source_construction[1],
-#                             dat.cx_semantics[1],
-#                             dat.cx_syntax[1],
-#                             dat.cx_intonation[1],
-#                             lang) # create/retrieve the construction (and related tables)
-# form = create_formula(dat.df[1].strip(), lang, constr) # create/retrieve the formula
-# var_cand, constituents_dict = process_variation(1, dat) # parse constituents, glosses and lemmas
-# consts = [create_constituent(const, lang, gloss_types, gloss_classes) for const in constituents_dict] # create Constituents and the dependent tables, and establish connections between them
-# var = create_variation(var_cand, form, dat.main[1], dat.syntax[1], dat.intonation[1]) #create Variations
-# create_var2const(var, consts) # establish many-to-many relations between variations and constituents
-
-
-start = time.time()
-gloss_types, gloss_classes = import_gloss_dict() # import the glosses annotations
-for rc in range(row_count+1):    
-    try:
-        validate_row(rc, dat)
-    except Exception as ex:
-        print(ex)
-        continue
-    #Create tables with formal characteristics for each row:
-    lang = create_lang(dat.languages[rc]) # create/retrieve the language
-    constr = create_construction(dat.source_construction[rc],
-                                dat.cx_semantics[rc],
-                                dat.cx_syntax[rc],
-                                dat.cx_intonation[rc],
-                                lang) # create/retrieve the construction (and related tables)
-    form = create_formula(dat.df[rc], lang, constr) # create/retrieve the formula
-    var_cand, constituents_dict = process_variation(rc, dat) # parse constituents, glosses and lemmas
-    consts = [create_constituent(const, lang, gloss_types, gloss_classes) for const in constituents_dict] # create Constituents and the dependent tables, and establish connections between them
-    var = create_variation(var_cand, form, dat.main[rc], dat.syntax[rc], dat.intonation[rc]) #create Variations
-    create_var2const(var, consts) # establish many-to-many relations between variations and constituents
-    session.flush()
+def create_inner_structure(dat_inner_structure: str, form):
+    dat_inner_structure = dat_inner_structure.strip()
+    if dat_inner_structure == "":
+        return None
     
-end = time.time()
-print("The time of execution of above program is :", (end-start), "s")
+    # get rid of inconsitencies in spaces
+    inner_structure_clean = ":".join([instr.strip() for instr in dat_inner_structure.split(':')])
+    inner_structures = [inn_str.strip().split(':', maxsplit=1) for inn_str in inner_structure_clean.split('|') if inn_str != '']
+    
+
+    for inn_str in inner_structures:
+        innstr1_cand = inn_str[0]
+        if len(inn_str) > 1:
+            innstr2_cand = inn_str[1]
+        else:
+            innstr2_cand = None
+        
+        #creating / retrieving the main inner_structure_subtype
+        innstr1 = session.query(InnerStructureTypes).filter(
+                InnerStructureTypes.inner_structure_type == innstr1_cand).first()
+        if innstr1 is None:
+            innstr1 = InnerStructureTypes(inner_structure_type = innstr1_cand)
+            session.add(innstr1)
+            session.commit()
+
+        # creating / retrieving inner_structure_subtype
+        if innstr2_cand is None:
+            innstr2 = None
+        else: 
+            innstr2 = session.query(InnerStructureSubtypes).filter(
+                InnerStructureSubtypes.inner_structure_subtype == innstr2_cand).first()
+            if innstr2 is None:
+                innstr2 = InnerStructureSubtypes(inner_structure_subtype = innstr2_cand)
+                session.add(innstr2)
+                session.commit()
+        
+        innstr = session.query(InnerStructure).filter(InnerStructure.innerstructuretypes == innstr1, 
+                                                        InnerStructure.innerstructuresubtypes == innstr2).first()
+        if innstr is None:
+            innstr = InnerStructure(innerstructuretypes = innstr1, innerstructuresubtypes = innstr2)
+            session.add(innstr)
+            session.commit()
+
+        form2innstr = session.query(Formula2InnerStructure).filter(
+            Formula2InnerStructure.innerstructure == innstr,
+            Formula2InnerStructure.formulas == form).first()
+        if form2innstr is None:
+            form2innstr = Formula2InnerStructure(innerstructure = innstr, formulas = form)
+            session.add(form2innstr)
+            session.commit()
+    
+    return True
 
 
+# def create_formula2inner_structure(innstr_list, form):
+#     for innstr_item in innstr_list:
+        
+
+# create_inner_structure("assessment: negative: speech act: irrelevant|disregard|question")
+
+
+# # Pickled the dataframe not to send API requests all the time
+# dat = get_table()
+# with open('pickled_df', 'wb') as f:
+#      pickle.dump(dat, f)
+
+with open('pickled_df', 'rb') as f:
+     dat: pd.DataFrame = pickle.load(f)
+
+dat.columns = dat.iloc[0]
+dat = dat.iloc[1:] #setting numeric indexing
+print(dat.columns.to_list())
+
+def main(dat):
+    session = Session(engine)
+    row_count = len(dat.values)
+    start = time.time()
+    gloss_types, gloss_classes = import_gloss_dict() # import the glosses annotations
+    for rc in range(row_count+1):    
+        try:
+            validate_row(rc, dat)
+        except Exception as ex:
+            print(ex)
+            continue
+        #Create tables with formal characteristics for each row:
+        lang = create_lang(dat.languages[rc]) # create/retrieve the language
+        constr = create_construction(dat.source_construction[rc],
+                                    dat.cx_semantics[rc],
+                                    dat.cx_syntax[rc],
+                                    dat.cx_intonation[rc],
+                                    lang) # create/retrieve the construction (and related tables)
+        form = create_formula(dat.df[rc], lang, constr) # create/retrieve the formula
+        # innstr_list = create_inner_structure(dat.inner_structure[rc]) #create/retrieve inner structures (and their types)
+        create_inner_structure(dat.inner_structure[rc], form)
+        var_cand, constituents_dict = process_variation(rc, dat) # parse constituents, glosses and lemmas
+        consts = [create_constituent(const, lang, gloss_types, gloss_classes) for const in constituents_dict] # create Constituents and the dependent tables, and establish connections between them
+        var = create_variation(var_cand, form, dat.main[rc], dat.syntax[rc], dat.intonation[rc]) #create Variations
+        create_var2const(var, consts) # establish many-to-many relations between variations and constituents
+        session.flush()
+    
+    session.close()
+    end = time.time()
+    print("Table data added in :", (end-start), "s")
+
+main(dat)
 con.close()
