@@ -16,6 +16,7 @@ import time
 
 engine = create_engine(f"postgresql://{USER}:{urllib.parse.quote_plus(PASSWORD)}@{HOST}/{DBNAME}")
 con = engine.connect()
+session = Session(engine)
 
 def get_table() -> pd.DataFrame:
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
@@ -47,7 +48,8 @@ def create_tables(): #creates the db structure and returns its classes
 
 base = create_tables()
 
-Syntax, CxSyntax, CxSemantics, Examples, GlossTypes, InnerStructureSubtypes, InnerStructureTypes, Intonations, Languages, Lemmas, Pragmatics, Literature, Semantics, Speech_acts, Frames, GlossClass, Glosses, InnerStructure, SourceConstructions, Formulas, Frame2SpeechActs, Variations, Formula2InnerStructure, Frame2Var, Variation2Constituents, Glossing, Constituents = base.classes.Syntax, base.classes.CxSyntax, base.classes.CxSemantics, base.classes.Examples, base.classes.GlossTypes, base.classes.InnerStructureSubtypes, base.classes.InnerStructureTypes, base.classes.Intonations, base.classes.Languages, base.classes.Lemmas, base.classes.Pragmatics, base.classes.Literature, base.classes.Semantics, base.classes.SpeechActs, base.classes.Frames, base.classes.GlossClass, base.classes.Glosses, base.classes.InnerStructure, base.classes.SourceConstructions, base.classes.Formulas, base.classes.Frame2SpeechActs, base.classes.Variations, base.classes.Formula2InnerStructure, base.classes.Frame2Var, base.classes.Variation2Constituents, base.classes.Glossing, base.classes.Constituents
+# shortening the table names
+Syntax, CxSyntax, CxSemantics, Examples, GlossTypes, InnerStructureSubtypes, InnerStructureTypes, Intonations, Languages, Lemmas, Pragmatics, Literature, Semantics, Speech_acts, Frames, GlossClass, Glosses, InnerStructure, SourceConstructions, Formulas, Frame2SpeechActs, Variations, Formula2InnerStructure, Frame2Var, Variation2Constituents, Glossing, Constituents, Constituents2Glossing = base.classes.Syntax, base.classes.CxSyntax, base.classes.CxSemantics, base.classes.Examples, base.classes.GlossTypes, base.classes.InnerStructureSubtypes, base.classes.InnerStructureTypes, base.classes.Intonations, base.classes.Languages, base.classes.Lemmas, base.classes.Pragmatics, base.classes.Literature, base.classes.Semantics, base.classes.SpeechActs, base.classes.Frames, base.classes.GlossClass, base.classes.Glosses, base.classes.InnerStructure, base.classes.SourceConstructions, base.classes.Formulas, base.classes.Frame2SpeechActs, base.classes.Variations, base.classes.Formula2InnerStructure, base.classes.Frame2Var, base.classes.Variation2Constituents, base.classes.Glossing, base.classes.Constituents, base.classes.Constituents2Glossing
 
 # # Pickled the dataframe not to send API requests all the time
 # dat = get_table()
@@ -59,13 +61,13 @@ with open('pickled_df', 'rb') as f:
 
 dat.columns = dat.iloc[0]
 dat = dat.iloc[1:] #setting numeric indexing
-# print(dat.columns.to_list())
+print(dat.columns.to_list())
 
 row_count = len(dat.values)
 
 def validate_row(row_n: int, dat: pd.DataFrame) -> None:
     if dat.df[row_n].strip() == '' or dat.variation[row_n].strip() == '' or dat.languages[row_n].strip() == '':
-         raise Exception(f"row {str(row_n)} is invalid")
+         raise Exception(f"row {str(row_n-1)} is invalid: no formula, language, or variation")
 
 """parsing a dataframe row
 Three types of parcing: single value (stripped), multiple values (split by |), single value hierarchical (split by the first : - maxsplit parameter)
@@ -74,7 +76,7 @@ Special cases: glosses, examples
 
 
 
-def create_gloss_dict (dat: pd.DataFrame, old_dict: str = 'gloss_dict.json', new_dict: str = 'gloss_dict.json'):
+def update_gloss_dict (dat: pd.DataFrame, old_dict: str = 'gloss_dict.json', new_dict: str = 'gloss_dict.json'):
     glosses = dat.glosses.unique()
     glosses = [re.split("=| |\.|-", gloss) for gloss in glosses]
     glosses_flat = set([item.strip().lower() for sublist in glosses for item in sublist if item.strip() != ""])
@@ -93,7 +95,7 @@ def create_gloss_dict (dat: pd.DataFrame, old_dict: str = 'gloss_dict.json', new
             json.dump(existing_dict, f, indent=2)
     print(f"n_new_glosses: {str(new_glosses_count)}")
 
-create_gloss_dict(dat)
+# update_gloss_dict(dat)
 
 def import_gloss_dict(fn: str = 'gloss_dict.json') -> dict:
     with open(fn, 'r') as f:
@@ -105,183 +107,303 @@ def import_gloss_dict(fn: str = 'gloss_dict.json') -> dict:
     gloss_classes = { gl["gloss"]:gl["class"] for gl in gloss_dict }
     return gloss_types, gloss_classes
 
-def process_gloss(row_n: int, dat: pd.DataFrame):
 
-    variation = dat.variation[row_n].strip()
-    constituents = variation.split(" ")
-
-    glossed = dat.glosses[row_n].strip()
-    if glossed == '':
-        glossed_markers_aligned = False
-    else:
-        markers = [re.split("-", constituent) for constituent in constituents]
-        markers = [item for sublist in markers for item in sublist] #flattened
-        glossed_markers = [glossed_constituent.split("-") for glossed_constituent in glossed.split(" ")]
-        glossed_markers = [item.strip() for sublist in glossed_markers for item in sublist] #flattened
-        
-        if glossed_markers != [] and len(glossed_markers) == len(markers):
-            glossed_markers_aligned = { markers[i]:[gloss for gloss in re.split("\.|=", glossed_markers[i]) if gloss != ''] for i, value in enumerate(markers)}
-            #created a marker alignement dictionary (for table Glossing)
-        else:
-            glossed_markers_aligned = False
-        
-    lang_cand = dat.languages[row_n].strip()
+def create_lang(lang_cand: str):
+    lang_cand = lang_cand.strip()
     lang = session.query(Languages).filter(Languages.language==lang_cand).first()
     if lang is None:
         lang = Languages(language=lang_cand)
-    
-    constituents = [re.sub('\.|-', '', constituent).replace("=","\'") for constituent in constituents]
-    lemmas = dat.lemmas[row_n].strip().split(' ')
-    if lemmas != [] and len(constituents) == len(lemmas):
-        lemmas_aligned = { constituent.strip():lemmas[i].strip() for i, constituent in enumerate(constituents) }
-        #created a lemmas_alignement dictionary (for table Constituents)
-    else:
-        lemmas_aligned = { constituent:None for constituent in constituents }
-    
-    return glossed_markers_aligned, lemmas_aligned, lang
+        session.add(lang)
+        
+    return lang
 
-def create_glossing(mark_cand: str, glosses: list[str], lang, gloss_types: dict, gloss_classes: dict):
-    for gl_cand in glosses:
+def create_construction(cand_constr: str, cand_cx_sem: str, cand_cx_syntax: str, cand_cx_intonation: str, lang):
+    
+    if cand_constr.strip() == '':
+        return None
+
+    cand_constr, cand_cx_sem, cand_cx_syntax = cand_constr.strip(), cand_cx_sem.strip(), cand_cx_syntax.strip()
+    constr = session.query(SourceConstructions).filter(SourceConstructions.construction == cand_constr, SourceConstructions.languages == lang).first()
+    
+    if constr is None:
+        # create/retrieve cxsemantics:
+        if cand_cx_sem != '':
+            cxsem = session.query(CxSemantics).filter(CxSemantics.cx_semantics == cand_cx_sem).first()
+            if cxsem is None:
+                cxsem = CxSemantics(cx_semantics = cand_cx_sem)
+        else:
+            cxsem = None
+        # create/retrieve cxsyntax:
+        if cand_cx_syntax != '':
+            cxsynt = session.query(CxSyntax).filter(CxSyntax.cx_syntax == cand_cx_syntax).first()
+            if cxsynt is None:
+                cxsynt = CxSyntax(cx_syntax = cand_cx_syntax)
+        else:
+            cxsynt = None
+
+        # creating a new construction
+        constr = SourceConstructions(construction=cand_constr, cxsemantics = cxsem, cxsyntax = cxsynt, cx_intonation = cand_cx_intonation, languages = lang)
+        session.add(constr)
+        session.commit()
+    
+    return constr
         
-        # checking if the type already in GlossTypes
-        gl_type_cand = gloss_types[gl_cand]
-        gl_type = session.query(GlossTypes).filter(GlossTypes.gloss_type==gl_type_cand).first()
+
+
+def create_formula(cand_form: str, lang, constr):
+    
+    cand_form = cand_form.strip()
+
+    # checking if this formula is in Formulas
+    form = session.query(Formulas).filter(
+            Formulas.formula == cand_form, 
+            Formulas.languages == lang, 
+            Formulas.sourceconstructions == constr
+            ).first()
         
-        if gl_type is not None: #type exists
-            # checking if the entry in Glosses needs to be created
-            gl = session.query(Glosses).filter(Glosses.gloss==gl_cand, Glosses.glosstypes == gl_type).first()
-            if gl is not None: #gloss exists
-                #checking if the glossing needs to be created:
-                    in_db =  session.query(Glossing).filter(Glossing.marker==mark_cand, Glossing.languages==lang, Glossing.glosses==gl).first()
-                    if in_db is not None: #move on to the next mapping
-                        # print (f"This combination marker, gloss, and language ({mark_cand}, {gl_cand}, lang) already in Glossing")
-                        continue
-                        
-            else: #gloss does not exist (and hence neither the glossing)
-                #retrieving/creating the gloss class needed for creation of a new Gloss
-                gl_class_cand = gloss_classes[gl_cand]
-                gl_class = session.query(GlossClass).filter(GlossClass.gloss_class==gl_class_cand).first()
-                if gl_class is None:
-                    gl_class = GlossClass(gloss_class=gl_class_cand)
-                # creating the new Gloss with an existing type
-                gl = Glosses(gloss=gl_cand, glossclass=gl_class, glosstypes = gl_type)
-        else: #type does not exist (and hence neither the gloss, or the glossing)
-            gl_type = GlossTypes(gloss_type=gl_type_cand)
+    if form is None:
+        form = Formulas(languages = lang, sourceconstructions=constr, formula=cand_form)
+        session.add(form)
+        session.commit()
+    
+    return form
+
+
+
+
+def process_variation(row_n: int, dat: pd.DataFrame) -> (str, str, list[dict]):
+
+    variation = dat.variation[row_n].strip()
+    constituents = [const.strip() for const in re.split(" | |=", variation)]
+    constituents_pretty = [re.sub('\.|-', '', constituent) for constituent in constituents]
+    
+    lemmas = dat.lemmas[row_n].strip().split(' ')
+    if lemmas != [''] and len(constituents_pretty) == len(lemmas):
+        #create a lemmas_alignement dictionary (for table Constituents)
+        lemmas_aligned = lemmas
+    else:
+        lemmas_aligned = [None for cp in constituents_pretty]
+
+    glossed = dat.glosses[row_n].strip()
+    if glossed != '':
+        glossed_constituents = [glossed_cost.strip() for glossed_cost in re.split(" | |=", glossed)]
+        try:
+            if len(glossed_constituents) != len(constituents_pretty):
+                raise Exception(f"len of tokens in glosses vs. variation does not match")
+            glosses_aligned = list()
+            for i, cp in enumerate(constituents_pretty):
+                constituent_markers = constituents[i].strip('.').split('-')
+                glosses = [gc for gc in glossed_constituents[i].strip('.').split('-') if gc != '']
+                if len(constituent_markers) != len(glosses):
+                    raise Exception((f"len of tokens in markers vs. glosses does not match"))
+                #created a marker ~ list of glosses alignement dictionary for the constituent (for table Glossing)
+                glossed_markers_aligned = [
+                        {"marker":marker, "glosses":glosses[k].split('.')}
+                        for k, marker in enumerate(constituent_markers)]
+                glosses_aligned.append(glossed_markers_aligned)
+        except Exception as ex:
+            print(str(row_n+1), ex)
+            glossed_constituents = [None for cp in constituents_pretty]
+            glosses_aligned = glossed_constituents
+    else:
+        print(str(row_n+1), "no glosses")
+        glossed_constituents = [None for cp in constituents_pretty]
+        glosses_aligned = glossed_constituents
+    
+
+    constituents = [{"constituent": cp, 
+                     "lemma": lemmas_aligned[i], 
+                     "full_gloss": glossed_constituents[i],
+                     "markers": glosses_aligned[i]
+                     } for i, cp in enumerate(constituents_pretty)]
+    return variation, constituents
+
+#constituent": {"constituent_pretty": {"lemma": Optional[str]",
+# "markers": [{marker: [glosses]}]}}
+
+
+def create_glossing(mark_cand: str, gl_cand: str, lang, gloss_types: dict, gloss_classes: dict):
+    
+    # checking if the type already in GlossTypes
+    gl_type_cand = gloss_types[gl_cand]
+    gl_type = session.query(GlossTypes).filter(GlossTypes.gloss_type==gl_type_cand).first()
+    
+    if gl_type is not None: #type exists
+        # checking if the entry in Glosses needs to be created
+        gl = session.query(Glosses).filter(Glosses.gloss==gl_cand, Glosses.glosstypes == gl_type).first()
+        if gl is not None: #gloss exists
+            #checking if the glossing needs to be created:
+                in_db =  session.query(Glossing).filter(Glossing.marker==mark_cand, Glossing.languages==lang, Glossing.glosses==gl).first()
+                if in_db is not None: #return glossing
+                    # print (f"This combination marker, gloss, and language ({mark_cand}, {gl_cand}, lang) already in Glossing")
+                    return in_db
+                    
+        else: #gloss does not exist (and hence neither the glossing)
+            #retrieving/creating the gloss class needed for creation of a new Gloss
             gl_class_cand = gloss_classes[gl_cand]
             gl_class = session.query(GlossClass).filter(GlossClass.gloss_class==gl_class_cand).first()
             if gl_class is None:
                 gl_class = GlossClass(gloss_class=gl_class_cand)
+            # creating the new Gloss with an existing type
             gl = Glosses(gloss=gl_cand, glossclass=gl_class, glosstypes = gl_type)
-        
-        glossing = Glossing(glosses=gl,
-                            languages=lang, 
-                            marker=mark_cand)
-        session.add(glossing)
-        session.commit()
-
-def create_glossings(glossed_markers_aligned, lang, gloss_types: dict, gloss_classes: dict):
-    #creating Glossings:
-    if glossed_markers_aligned:
-        # print("starting ")
-        for mark_cand, glosses in glossed_markers_aligned.items():
-            create_glossing(mark_cand, glosses, lang, gloss_types, gloss_classes)
+    else: #type does not exist (and hence neither the gloss, or the glossing)
+        gl_type = GlossTypes(gloss_type=gl_type_cand)
+        gl_class_cand = gloss_classes[gl_cand]
+        gl_class = session.query(GlossClass).filter(GlossClass.gloss_class==gl_class_cand).first()
+        if gl_class is None:
+            gl_class = GlossClass(gloss_class=gl_class_cand)
+        gl = Glosses(gloss=gl_cand, glossclass=gl_class, glosstypes = gl_type)
     
+    glossing = Glossing(glosses=gl,
+                        languages=lang, 
+                        marker=mark_cand)
+    session.add(glossing)
+    session.commit()
+    
+    return glossing
 
-session = Session(engine)
+def create_glossings(glossed_markers_aligned: list[dict], lang, gloss_types: dict, gloss_classes: dict):
+    #creating Glossings from a dict of markers
+    if glossed_markers_aligned != None:
+        # print("starting ")
+        glossings = list()
+        for glossed_marker in glossed_markers_aligned:
+            glossings_new = [create_glossing(glossed_marker["marker"], gloss_cand, lang, gloss_types, gloss_classes)
+                         for gloss_cand in glossed_marker["glosses"]]
+            glossings.extend(glossings_new)
+        return glossings
 
-gloss_types, gloss_classes = import_gloss_dict()
-# process_gloss(1, dat, gloss_types, gloss_classes)
-glossed_markers_aligned, lemmas_aligned, lang = process_gloss(2, dat)
+def create_constituent(constituent_dict: dict, lang, gloss_types:dict, gloss_classes: dict):
+    const_cand = constituent_dict["constituent"]
+    lemma_cand = constituent_dict["lemma"]
+    markers = constituent_dict["markers"]
+    glossings = create_glossings(markers, lang, gloss_types, gloss_classes)
 
-def create_constituents(lemmas_aligned: dict, lang):
-
-    for constituent, lemma in lemmas_aligned.items():
-        l = session.query(Lemmas).filter(Lemmas.lemma == lemma).first()
+    if lemma_cand is not None:
+        l = session.query(Lemmas).filter(Lemmas.lemma == lemma_cand).first()
         if l is None:
-            l = Lemmas(lemma=lemma)
-        else:
-            #checking if this constituent already exists
-            const = session.query(Constituents).filter(Constituents.constituent == constituent, 
-                                                       Constituents.languages == lang, Constituents.lemmas == l
-                                                       ).first()
-            if const is not None: # a constituent already exists
-                continue
-            
-        constituents = Constituents(constituent=constituent, languages=lang, lemmas=l)
-        session.add(constituents)
+            l = Lemmas(lemma=lemma_cand)
+            session.add(l)
+            session.commit()
+    else:
+        l = None
+    #checking if this constituent already exists
+    const = session.query(Constituents).filter(Constituents.constituent == const_cand, 
+                                                    Constituents.languages == lang,
+                                                    Constituents.lemmas == l
+                                                    ).first()
+    if const is None: # creating a new constituent
+        full_gloss = constituent_dict["full_gloss"]
+        const = Constituents(constituent=const_cand, languages=lang, lemmas=l, glossed=full_gloss)
+        # , constituents2glossing_collection = glossings
+        session.add(const)
         session.commit()
 
+    if glossings is not None:
+        for gl in glossings:
+            c2g = session.query(Constituents2Glossing).filter(Constituents2Glossing.constituents == const, Constituents2Glossing.glossing == gl).first()
+            if c2g is None:
+                c2g = Constituents2Glossing(constituents = const, glossing = gl)
+                session.add(c2g)
+                session.commit()
+
+    return const
+
+def create_variation(var_cand: str, form, main, synt_cand: str, inton_cand: str):
+    var_cand = var_cand.strip()
+    var_cand = re.sub('\.|-', '', var_cand)
+    #creating/retrieving intonation
+    inton_cand = inton_cand.strip()
+    if inton_cand != '':
+        inton = session.query(Intonations).filter(Intonations.intonation == inton_cand).first()
+        if inton == None:
+            inton = Intonations(intonation = inton_cand)
+            session.add(inton)
+    else:
+        inton = None
+    # Checking if the unique variation already exists
+    var = session.query(Variations).filter(Variations.variation == var_cand, 
+                                           Variations.formulas == form, 
+                                           Variations.intonations == inton
+                                           ).first()
+    if var != None:
+        return var
+    else:
+        #creating/retrieving syntax
+        synt_cand = synt_cand.strip()
+        if synt_cand != '':
+            synt = session.query(Syntax).filter(Syntax.syntax == synt_cand).first()
+            if synt == None:
+                synt = Syntax(syntax = synt_cand)
+        else:
+            synt = None
+        
+        if main != '':
+            main = True
+        else:
+            # try to infer whether this is the main variation
+            if var_cand == form.formula:
+                main = True
+            else:
+                main = False
+
+        # Creating a new var
+        var = Variations(variation = var_cand, main = main, formulas = form, intonations = inton, syntax = synt)
+        session.add(var)
+        session.commit()
+    
+    return var
+    
+def create_var2const(var, consts: list):
+    for const in consts:
+        var2const = session.query(Variation2Constituents).filter(
+            Variation2Constituents.variations == var,
+            Variation2Constituents.constituents == const).first()
+        if var2const is None:
+            var2const = Variation2Constituents(variations = var, constituents = const)
+            session.add(var2const)
+            session.commit()
+
+
+# # ready part for creating all the tables with formal characteristics:
+# gloss_types, gloss_classes = import_gloss_dict() # import the glosses annotations
+# lang = create_lang(dat.languages[1]) # create/retrieve the language
+# constr = create_construction(dat.source_construction[1],
+#                             dat.cx_semantics[1],
+#                             dat.cx_syntax[1],
+#                             dat.cx_intonation[1],
+#                             lang) # create/retrieve the construction (and related tables)
+# form = create_formula(dat.df[1].strip(), lang, constr) # create/retrieve the formula
+# var_cand, constituents_dict = process_variation(1, dat) # parse constituents, glosses and lemmas
+# consts = [create_constituent(const, lang, gloss_types, gloss_classes) for const in constituents_dict] # create Constituents and the dependent tables, and establish connections between them
+# var = create_variation(var_cand, form, dat.main[1], dat.syntax[1], dat.intonation[1]) #create Variations
+# create_var2const(var, consts) # establish many-to-many relations between variations and constituents
 
 
 start = time.time()
-for rc in range(row_count):    
+gloss_types, gloss_classes = import_gloss_dict() # import the glosses annotations
+for rc in range(row_count+1):    
     try:
         validate_row(rc, dat)
     except Exception as ex:
-        # print(ex)
+        print(ex)
         continue
-    #Create Glossing, Glosses for every row
-    glossed_markers_aligned, lemmas_aligned, lang = process_gloss(rc, dat)
-    # print(str(rc))
-    create_glossings(glossed_markers_aligned, lang, gloss_types, gloss_classes)
-    create_constituents(lemmas_aligned, lang)
-    # except Exception as ex:
-    #     if type(ex) == KeyError:
-    #         print(ex)
-    #     else:
-    #         print(ex)
-    #     continue
+    #Create tables with formal characteristics for each row:
+    lang = create_lang(dat.languages[rc]) # create/retrieve the language
+    constr = create_construction(dat.source_construction[rc],
+                                dat.cx_semantics[rc],
+                                dat.cx_syntax[rc],
+                                dat.cx_intonation[rc],
+                                lang) # create/retrieve the construction (and related tables)
+    form = create_formula(dat.df[rc], lang, constr) # create/retrieve the formula
+    var_cand, constituents_dict = process_variation(rc, dat) # parse constituents, glosses and lemmas
+    consts = [create_constituent(const, lang, gloss_types, gloss_classes) for const in constituents_dict] # create Constituents and the dependent tables, and establish connections between them
+    var = create_variation(var_cand, form, dat.main[rc], dat.syntax[rc], dat.intonation[rc]) #create Variations
+    create_var2const(var, consts) # establish many-to-many relations between variations and constituents
+    session.flush()
+    
 end = time.time()
 print("The time of execution of above program is :", (end-start), "s")
-
-def add_formula(cand_form, cand_lang, cand_constr, cand_inton):
-    
-    lang = session.query(Languages).filter(Languages.language == cand_lang).first()
-    constr = session.query(SourceConstructions).filter(SourceConstructions.construction == cand_constr).first()
-
-    if lang is not None and constr is not None:
-        form = session.query(Formulas).filter(
-            Formulas.formula == cand_form, 
-            Formulas.languages == lang, 
-            Formulas.sourceconstructions == constr).first()
-        
-        if form is not None:
-            raise ValueError("This combination of formula, language, and construction already in Formulas")
-    else:
-        if lang is None:
-            lang = Languages(language=cand_lang)
-        if constr is None:
-            constr = SourceConstructions(construction=cand_constr)
-
-    inton = session.query(Intonations).filter(Intonations.intonation == cand_inton).first()
-    if inton is None:
-        inton = Intonations(intonation=cand_inton)
-
-    new_formula2 = Formulas(languages = lang, sourceconstructions=constr, intonations=inton, formula=cand_form)
-    session.add(new_formula2)
-    session.commit()
-try:
-    add_formula("ci mancherebbe", "it", "ci mancherebbe VP-Inf", "exclamative")
-except Exception as ex:
-    print(ex)
-
-
-
-
-
-
-
-# new_formula = Formulas(languages = Languages(language=language), source_constructions=SourceConstructions(construction=construction), intonations=Intonations(intonation=intonation), formula=formula)
-# # new_frame = 
-# session.add(new_formula)
-# session.commit()
-
-
-
-# def split_data(dataframe):
-#     new_Formulas: pd.DataFrame = dataframe[dataframe['status'].isin(['to_db', 'change'])]
-#     delete_Formulas = dataframe[dataframe['status'].isin(['delete', 'change'])]
-#     return new_Formulas, delete_Formulas
 
 
 con.close()

@@ -138,7 +138,7 @@ CREATE TABLE IF NOT EXISTS public.frames (
 	speech_act1_id int4 NULL,
 	speech_act2_id int4 NULL,
 	structure int4 NULL,
-	CONSTRAINT realisations_pkey PRIMARY KEY (frame_id),
+	CONSTRAINT frames_key PRIMARY KEY (frame_id),
 	CONSTRAINT pragmatics_fk FOREIGN KEY (pragmatics_id) REFERENCES public.pragmatics(pragmatics_id),
 	CONSTRAINT semantics_fk FOREIGN KEY (semantics_id) REFERENCES public.semantics(semantics_id)
 );
@@ -184,7 +184,7 @@ CREATE TABLE IF NOT EXISTS public.glossing (
 CREATE TABLE IF NOT EXISTS public.constituents (
 	constituent_id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
 	constituent varchar NOT NULL,
-	glossed varchar NOT NULL,
+	glossed varchar NULL,
 	language_id integer,
 	lemma_id integer,
 	CONSTRAINT constituents_pk PRIMARY KEY (constituent_id),
@@ -222,11 +222,13 @@ CREATE TABLE IF NOT EXISTS public.source_constructions (
 	construction varchar(200) NOT NULL,
 	cx_syntax_id integer NULL,
 	cx_semantics_id integer NULL,
+	language_id integer NOT NULL,
 	cx_intonation varchar(100) NULL,
 
 	CONSTRAINT source_constructions_construction_key UNIQUE (construction),
 	CONSTRAINT source_constructions_pkey PRIMARY KEY (construction_id),
 	CONSTRAINT cx_semantics_fk FOREIGN KEY (cx_semantics_id) REFERENCES public.cx_semantics(cx_semantics_id),
+	CONSTRAINT cx_lang FOREIGN KEY (language_id) REFERENCES public.languages(language_id),
 	CONSTRAINT cx_syntax_fk FOREIGN KEY (cx_syntax_id) REFERENCES public.cx_syntax(cx_syntax_id)
 );
 
@@ -239,12 +241,10 @@ CREATE TABLE IF NOT EXISTS public.formulas (
 	formula varchar(50) NOT NULL,
 	language_id int4 NULL,
 	construction_id int4 NULL,
-	intonation_id int4 NULL,
 	CONSTRAINT formulas_pkey PRIMARY KEY (formula_id),
 	CONSTRAINT formulas_un UNIQUE (formula, language_id, construction_id),
 	CONSTRAINT construction_fk FOREIGN KEY (construction_id) REFERENCES public.source_constructions(construction_id),
-	CONSTRAINT fk_language FOREIGN KEY (language_id) REFERENCES public.languages(language_id) ON DELETE SET NULL,
-	CONSTRAINT intionation_fk FOREIGN KEY (intonation_id) REFERENCES public.intonations(intonation_id)
+	CONSTRAINT fk_language FOREIGN KEY (language_id) REFERENCES public.languages(language_id) ON DELETE SET NULL
 );
 
 
@@ -270,13 +270,14 @@ CREATE TABLE IF NOT EXISTS public.variations (
 	variation_id int4 NOT NULL GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1 NO CYCLE),
 	variation varchar(100) NOT NULL,
 	formula_id int4 NOT NULL,
-	full_gloss varchar NULL,
 	main bool NOT NULL,
-	syntax_id integer,
+	syntax_id integer NULL,
+	intonation_id int4 NULL,
 	CONSTRAINT variations_pkey PRIMARY KEY (variation_id),
-	CONSTRAINT variations_variation_key UNIQUE (variation),
+	CONSTRAINT variations_variation_key UNIQUE (variation, formula_id, intonation_id),
 	CONSTRAINT fk_formula FOREIGN KEY (formula_id) REFERENCES public.formulas(formula_id),
-	CONSTRAINT fk_syntax FOREIGN KEY (syntax_id) REFERENCES public.syntax(syntax_id)
+	CONSTRAINT fk_syntax FOREIGN KEY (syntax_id) REFERENCES public.syntax(syntax_id),
+	CONSTRAINT intionation_fk FOREIGN KEY (intonation_id) REFERENCES public.intonations(intonation_id)
 );
 
 
@@ -318,7 +319,8 @@ CREATE TABLE IF NOT EXISTS public.variation2constituents (
 	variation2constituent_id int4 NOT NULL GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1 NO CYCLE),
 	variation_id int4 NOT NULL,
 	constituent_id int4 NULL,
-	CONSTRAINT realisation2gloss_pkey PRIMARY KEY (variation2constituent_id),
+	CONSTRAINT variation2constituents_pkey PRIMARY KEY (variation2constituent_id),
+	CONSTRAINT variation2constituents_un UNIQUE (variation_id, constituent_id),
 	CONSTRAINT fk_gloss FOREIGN KEY (constituent_id) REFERENCES public.constituents(constituent_id) ON DELETE SET NULL,
 	CONSTRAINT fk_variation FOREIGN KEY (variation_id) REFERENCES public.variations(variation_id) ON DELETE CASCADE
 );
