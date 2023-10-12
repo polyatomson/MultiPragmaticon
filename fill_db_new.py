@@ -455,5 +455,19 @@ def main(dat):
     end = time.time()
     print("Table data added in :", (end-start), "s")
 
-main(dat)
+# main(dat)
+session = Session(engine)
+inner_structures = session.query(Formula2InnerStructure
+                                 ).order_by(
+                                     Formula2InnerStructure.formula_id,
+                                     ).all()
+#retrieving all innerstructure~formula mappings
+for i_s in inner_structures[0:30]:
+    if i_s.innerstructure.inner_structure_subtype_id is None:
+        print(f"{i_s.innerstructure.innerstructuretypes.inner_structure_type};;{i_s.formulas.formula}")
+    else:
+        print(f"{i_s.innerstructure.innerstructuretypes.inner_structure_type};{i_s.innerstructure.innerstructuresubtypes.inner_structure_subtype};{i_s.formulas.formula}")
+# print(inner_structures)
+
+
 con.close()
