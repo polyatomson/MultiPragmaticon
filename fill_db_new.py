@@ -13,21 +13,24 @@ import pickle
 import json
 import time
 
+def my_timer(func): #timer wrapper
+
+    def wrapper(*args, **kwargs):
+        func_name = func.__name__
+        print(f"Starting {func_name}")
+        
+        t1 = time.perf_counter()
+        output = func(*args, **kwargs)
+        t2 = time.perf_counter()
+        
+        print(f"Total time for {func_name}: {t2 - t1:.3f} s\n")
+        return output
+    
+    return wrapper
+
 engine = create_engine(f"postgresql://{USER}:{urllib.parse.quote_plus(PASSWORD)}@{HOST}/{DBNAME}")
 con = engine.connect()
 session = Session(engine)
-
-def get_table() -> pd.DataFrame:
-    scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-    credentials = ServiceAccountCredentials.from_json_keyfile_name('pragmaticon.json', scope)
-    gc = gspread.authorize(credentials)
-    sheet_url = DATAURL
-    wb = gc.open_by_url(sheet_url)
-    sheet = wb.worksheet('main')
-    df = pd.DataFrame(sheet.get_all_values())
-    return df
-
-
 
 def create_tables(): #creates the db structure and returns its classes
     def camelize_classname(base, tablename, table):
@@ -46,27 +49,41 @@ def create_tables(): #creates the db structure and returns its classes
     return Base
 
 base = create_tables()
-
-# shortening the table names
 Syntax, CxSyntax, CxSemantics, Examples, GlossTypes, InnerStructureSubtypes, InnerStructureTypes, Intonations, Languages, Lemmas, Pragmatics, Literature, Semantics, Speech_acts, Frames, GlossClass, Glosses, InnerStructure, SourceConstructions, Formulas, Frame2SpeechActs, Variations, Formula2InnerStructure, Frame2Var, Variation2Constituents, Glossing, Constituents, Constituents2Glossing = base.classes.Syntax, base.classes.CxSyntax, base.classes.CxSemantics, base.classes.Examples, base.classes.GlossTypes, base.classes.InnerStructureSubtypes, base.classes.InnerStructureTypes, base.classes.Intonations, base.classes.Languages, base.classes.Lemmas, base.classes.Pragmatics, base.classes.Literature, base.classes.Semantics, base.classes.SpeechActs, base.classes.Frames, base.classes.GlossClass, base.classes.Glosses, base.classes.InnerStructure, base.classes.SourceConstructions, base.classes.Formulas, base.classes.Frame2SpeechActs, base.classes.Variations, base.classes.Formula2InnerStructure, base.classes.Frame2Var, base.classes.Variation2Constituents, base.classes.Glossing, base.classes.Constituents, base.classes.Constituents2Glossing
 
+def get_table() -> pd.DataFrame:
+    scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+    credentials = ServiceAccountCredentials.from_json_keyfile_name('pragmaticon.json', scope)
+    gc = gspread.authorize(credentials)
+    sheet_url = DATAURL
+    wb = gc.open_by_url(sheet_url)
+    sheet = wb.worksheet('main')
+    df = pd.DataFrame(sheet.get_all_values())
+    return df
 
+#Get the dataframe and save it as a pickle not to send API requests all the time
+# dat = get_table()
+# with open('pickled_df', 'wb') as f:
+#      pickle.dump(dat, f)
+
+def unpickle_df(pickled_df_fn: str = 'pickled_df'):
+    with open(pickled_df_fn, 'rb') as f:
+        dat: pd.DataFrame = pickle.load(f)
+
+    dat.columns = dat.iloc[0]
+    dat = dat.iloc[1:] #setting numeric indexing
+    print(dat.columns.to_list())
+    return dat
 
 def validate_row(row_n: int, dat: pd.DataFrame) -> None:
     if dat.df[row_n].strip() == '' or dat.variation[row_n].strip() == '' or dat.languages[row_n].strip() == '':
          raise Exception(f"row {str(row_n-1)} is invalid: no formula, language, or variation")
 
-"""parsing a dataframe row
-Three types of parcing: single value (stripped), multiple values (split by |), single value hierarchical (split by the first : - maxsplit parameter)
-Special cases: glosses, examples
-"""
 
-
-
-def update_gloss_dict (dat: pd.DataFrame, old_dict: str = 'gloss_dict.json', new_dict: str = 'gloss_dict.json'):
+def update_gloss_dict (dat: pd.DataFrame, old_dict: str = 'gloss_dict1.json', new_dict: str = 'gloss_dict_revise.json'):
     glosses = dat.glosses.unique()
     glosses = [re.split("=| |\.|-", gloss) for gloss in glosses]
-    glosses_flat = set([item.strip().lower() for sublist in glosses for item in sublist if item.strip() != ""])
+    glosses_flat = set([item.strip() for sublist in glosses for item in sublist if item.strip() != ""])
     
     # getting annotated glosses:
     with open(old_dict, 'r') as f:
@@ -76,23 +93,31 @@ def update_gloss_dict (dat: pd.DataFrame, old_dict: str = 'gloss_dict.json', new
     for gl in glosses_flat:
          if gl not in existing_glosses:
               new_glosses_count += 1
-              existing_dict["glosses"].append({"gloss":gl, "type": "lexical", "class": None})
+              existing_dict["glosses"].append({"gloss":gl, "type": "lexical", "class": None, "change_to": None})
     if new_glosses_count != 0:
         with open(new_dict, 'w') as f:
             json.dump(existing_dict, f, indent=2)
     print(f"n_new_glosses: {str(new_glosses_count)}")
 
-# update_gloss_dict(dat)
-
-def import_gloss_dict(fn: str = 'gloss_dict.json') -> dict:
+def import_gloss_dict(fn: str = 'gloss_dict1.json') -> dict:
     with open(fn, 'r') as f:
         gloss_dict = json.load(f)
     gloss_dict = gloss_dict["glosses"]
-    # gloss_types = { gl["gloss"]:gl["type"] for gl in gloss_dict if gl["type"] is not None }
     gloss_types = { gl["gloss"]:gl["type"] for gl in gloss_dict }
-    # gloss_classes = { gl["gloss"]:gl["class"] for gl in gloss_dict if gl["class"] is not None }
     gloss_classes = { gl["gloss"]:gl["class"] for gl in gloss_dict }
-    return gloss_types, gloss_classes
+    change = { gl["gloss"]:gl["change_to"] for gl in gloss_dict 
+              if gl["status"] == "0" and gl["change_to"] != "specific_lexical_gloss"}
+    return gloss_types, gloss_classes, change
+
+def change_gloss(glosses: list[str], change: dict): #used in process_variation to replace incorrect glosses with the correct ones
+    changed_list = list()
+    for gloss in glosses:
+        if gloss not in change:
+            changed_list.append(gloss)
+        else:
+            for new_gl in change[gloss].split('.'):
+                changed_list.append(new_gl)
+    return changed_list
 
 
 def create_lang(lang_cand: str):
@@ -134,8 +159,6 @@ def create_construction(cand_constr: str, cand_cx_sem: str, cand_cx_syntax: str,
         session.commit()
     
     return constr
-        
-
 
 def create_formula(cand_form: str, lang, constr):
     
@@ -155,14 +178,11 @@ def create_formula(cand_form: str, lang, constr):
     
     return form
 
-
-
-
-def process_variation(row_n: int, dat: pd.DataFrame) -> (str, str, list[dict]):
+def process_variation(row_n: int, dat: pd.DataFrame, change: dict) -> (str, str, list[dict]):
 
     variation = dat.variation[row_n].strip()
     constituents = [const.strip() for const in re.split(" | |=", variation)]
-    constituents_pretty = [re.sub('\.|-', '', constituent) for constituent in constituents]
+    constituents_pretty = [re.sub('\.|-|∅', '', constituent) for constituent in constituents]
     
     lemmas = dat.lemmas[row_n].strip().split(' ')
     if lemmas != [''] and len(constituents_pretty) == len(lemmas):
@@ -176,22 +196,28 @@ def process_variation(row_n: int, dat: pd.DataFrame) -> (str, str, list[dict]):
         glossed_constituents = [glossed_cost.strip() for glossed_cost in re.split(" | |=", glossed)]
         try:
             if len(glossed_constituents) != len(constituents_pretty):
-                raise Exception(f"len of tokens in glosses vs. variation does not match")
+                raise Exception("len of constituents in glosses vs. variation does not match")
             glosses_aligned = list()
             for i, cp in enumerate(constituents_pretty):
                 constituent_markers = constituents[i].strip('.').split('-')
                 glosses = [gc for gc in glossed_constituents[i].strip('.').split('-') if gc != '']
                 if len(constituent_markers) != len(glosses):
-                    raise Exception((f"len of tokens in markers vs. glosses does not match"))
+                    raise Exception(("len of tokens in markers vs. glosses does not match"))
                 #created a marker ~ list of glosses alignement dictionary for the constituent (for table Glossing)
                 glossed_markers_aligned = [
-                        {"marker":marker, "glosses":glosses[k].split('.')}
+                        {"marker":marker, "glosses":change_gloss(glosses[k].split('.'), change)}
                         for k, marker in enumerate(constituent_markers)]
                 glosses_aligned.append(glossed_markers_aligned)
+                # update full gloss to account for the changes in glosses
+                glossed_constituents[i] = ".".join(glossed_markers_aligned[0]["glosses"]) + ''.join([
+                   punc + ".".join(glossed_markers_aligned[i+1]["glosses"]) 
+                   for i, punc in enumerate(re.findall('-|=', glossed_constituents[i]))
+                ])
         except Exception as ex:
             print(str(row_n+1), ex)
-            glossed_constituents = [None for cp in constituents_pretty]
-            glosses_aligned = glossed_constituents
+            if str(ex) == "len of constituents in glosses vs. variation does not match":
+                glossed_constituents = [None for cp in constituents_pretty]
+            glosses_aligned = [None for cp in constituents_pretty]
     else:
         print(str(row_n+1), "no glosses")
         glossed_constituents = [None for cp in constituents_pretty]
@@ -204,10 +230,6 @@ def process_variation(row_n: int, dat: pd.DataFrame) -> (str, str, list[dict]):
                      "markers": glosses_aligned[i]
                      } for i, cp in enumerate(constituents_pretty)]
     return variation, constituents
-
-#constituent": {"constituent_pretty": {"lemma": Optional[str]",
-# "markers": [{marker: [glosses]}]}}
-
 
 def create_glossing(mark_cand: str, gl_cand: str, lang, gloss_types: dict, gloss_classes: dict):
     
@@ -340,7 +362,7 @@ def create_variation(var_cand: str, form, main, synt_cand: str, inton_cand: str)
         session.commit()
     
     return var
-    
+
 def create_var2const(var, consts: list):
     for const in consts:
         var2const = session.query(Variation2Constituents).filter(
@@ -405,30 +427,12 @@ def create_inner_structure(dat_inner_structure: str, form):
     return True
 
 
-# def create_formula2inner_structure(innstr_list, form):
-#     for innstr_item in innstr_list:
-        
-
-# create_inner_structure("assessment: negative: speech act: irrelevant|disregard|question")
-
-
-# # Pickled the dataframe not to send API requests all the time
-# dat = get_table()
-# with open('pickled_df', 'wb') as f:
-#      pickle.dump(dat, f)
-
-with open('pickled_df', 'rb') as f:
-     dat: pd.DataFrame = pickle.load(f)
-
-dat.columns = dat.iloc[0]
-dat = dat.iloc[1:] #setting numeric indexing
-print(dat.columns.to_list())
-
-def main(dat):
+@my_timer
+def main(dat: pd.DataFrame):
     session = Session(engine)
     row_count = len(dat.values)
-    start = time.time()
-    gloss_types, gloss_classes = import_gloss_dict() # import the glosses annotations
+    # start = time.time()
+    gloss_types, gloss_classes, change = import_gloss_dict() # import the glosses annotations
     for rc in range(row_count+1):    
         try:
             validate_row(rc, dat)
@@ -445,29 +449,84 @@ def main(dat):
         form = create_formula(dat.df[rc], lang, constr) # create/retrieve the formula
         # innstr_list = create_inner_structure(dat.inner_structure[rc]) #create/retrieve inner structures (and their types)
         create_inner_structure(dat.inner_structure[rc], form)
-        var_cand, constituents_dict = process_variation(rc, dat) # parse constituents, glosses and lemmas
+        var_cand, constituents_dict = process_variation(rc, dat, change) # parse constituents, glosses and lemmas
         consts = [create_constituent(const, lang, gloss_types, gloss_classes) for const in constituents_dict] # create Constituents and the dependent tables, and establish connections between them
         var = create_variation(var_cand, form, dat.main[rc], dat.syntax[rc], dat.intonation[rc]) #create Variations
         create_var2const(var, consts) # establish many-to-many relations between variations and constituents
         session.flush()
     
     session.close()
-    end = time.time()
-    print("Table data added in :", (end-start), "s")
+    # end = time.time()
+    # print("The entire table data inserted in :", (end-start), "s")
 
-# main(dat)
-session = Session(engine)
-inner_structures = session.query(Formula2InnerStructure
-                                 ).order_by(
-                                     Formula2InnerStructure.formula_id,
-                                     ).all()
-#retrieving all innerstructure~formula mappings
-for i_s in inner_structures[0:30]:
-    if i_s.innerstructure.inner_structure_subtype_id is None:
-        print(f"{i_s.innerstructure.innerstructuretypes.inner_structure_type};;{i_s.formulas.formula}")
-    else:
-        print(f"{i_s.innerstructure.innerstructuretypes.inner_structure_type};{i_s.innerstructure.innerstructuresubtypes.inner_structure_subtype};{i_s.formulas.formula}")
-# print(inner_structures)
+# main(unpickle_df())
 
+@my_timer
+def get_all_constituents() -> list:
+    # constituents_ids = con.execute(text("SELECT constituents.constitent_id"))
+    constituents = con.execute(text("""
+                                SELECT constituent, full_gloss, lang, lemma, json_agg(json_build_object('marker', markers, 'glosses', glosses)) FROM
+                                (SELECT constituents.constituent as constituent, 
+                                    constituents.glossed as full_gloss,
+                                    languages.language as lang, 
+                                    lemmas.lemma as lemma,
+                                    glossing.marker as markers,
+                                    min(constituents2glossing.constituents2glossing_id) as min_constituents2glossing_id,
+                                    json_agg(glosses.gloss ORDER BY constituents2glossing.constituents2glossing_id) as glosses
+                                    
+                                FROM public.constituents constituents JOIN public.languages languages ON (constituents.language_id = languages.language_id)
+                                    LEFT JOIN public.lemmas lemmas ON (constituents.lemma_id = lemmas.lemma_id)
+                                    LEFT JOIN public.constituents2glossing constituents2glossing ON (constituents2glossing.constituent_id = constituents.constituent_id)
+                                    JOIN public.glossing glossing ON (constituents2glossing.glossing_id = glossing.glossing_id)
+                                    LEFT JOIN public.glosses glosses ON (glossing.gloss_id = glosses.gloss_id)
+                                GROUP BY constituents.constituent, constituents.glossed, languages.language, lemmas.lemma, glossing.marker
+                                ORDER BY constituents.constituent, min_constituents2glossing_id
+                                    )
+                                GROUP BY constituent, full_gloss, lang, lemma
+                                    
+                                
+                                    """
+                                    )).all()
+    constituents = [tuple(row) for row in constituents]
+    # glosses = con.
+    # glossings = 
+    return constituents
+
+def get_all_constituents_strings() -> list:
+    # constituents_ids = con.execute(text("SELECT constituents.constitent_id"))
+    constituents = con.execute(text("""
+                                SELECT constituent, full_gloss, lang, lemma, STRING_AGG(markers, '-'), STRING_AGG(glosses, '-') FROM
+                                (SELECT constituents.constituent as constituent, 
+                                    constituents.glossed as full_gloss,
+                                    languages.language as lang, 
+                                    lemmas.lemma as lemma,
+                                    glossing.marker as markers,
+                                    min(constituents2glossing.constituents2glossing_id) as min_constituents2glossing_id,
+                                    STRING_AGG(glosses.gloss, '.' ORDER BY constituents2glossing.constituents2glossing_id) as glosses
+                                    
+                                FROM public.constituents constituents JOIN public.languages languages ON (constituents.language_id = languages.language_id)
+                                    LEFT JOIN public.lemmas lemmas ON (constituents.lemma_id = lemmas.lemma_id)
+                                    LEFT JOIN public.constituents2glossing constituents2glossing ON (constituents2glossing.constituent_id = constituents.constituent_id)
+                                    LEFT JOIN public.glossing glossing ON (constituents2glossing.glossing_id = glossing.glossing_id)
+                                    LEFT JOIN public.glosses glosses ON (glossing.gloss_id = glosses.gloss_id)
+                                GROUP BY constituents.constituent, constituents.glossed, languages.language, lemmas.lemma, glossing.marker
+                                ORDER BY constituents.constituent, min_constituents2glossing_id
+                                    )
+                                GROUP BY constituent, full_gloss, lang, lemma
+                                    
+                                
+                                    """
+                                    )).all()
+    constituents = [tuple(row) for row in constituents]
+    # glosses = con.
+    # glossings = 
+    return constituents
+
+
+
+# all_const = get_all_constituents()
+all_const = {"constituents":get_all_constituents_strings()}
+with open('all_constituents.json', 'w', encoding='utf-8') as f:
+    json.dump(all_const, f, indent = 2, ensure_ascii=False)
 
 con.close()
