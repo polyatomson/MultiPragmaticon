@@ -170,12 +170,13 @@ CREATE TABLE IF NOT EXISTS public.glosses (
 );
 
 CREATE TABLE IF NOT EXISTS public.glossing (
-	glossing_id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
+	glossing_id int4 NOT NULL GENERATED ALWAYS AS IDENTITY,
 	gloss_id int4 NOT NULL,
 	marker varchar NOT NULL,
-	language_id integer NOT NULL,
+	language_id int4 NOT NULL,
+	marker_id int4 NULL,
 	CONSTRAINT glossing_pk PRIMARY KEY (glossing_id),
-	CONSTRAINT glossing_un UNIQUE (marker, gloss_id, language_id),
+	CONSTRAINT glossing_un UNIQUE (marker_id, marker, gloss_id, language_id),
 	CONSTRAINT gloss_fk FOREIGN KEY (gloss_id) REFERENCES public.glosses(gloss_id),
 	CONSTRAINT language_fk FOREIGN KEY (language_id) REFERENCES public.languages(language_id)
 );

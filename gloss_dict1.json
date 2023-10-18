@@ -1985,7 +1985,7 @@
       "explanation": null
     },
     {
-      "gloss": "God's",
+      "gloss": "God`s",
       "type": "lexical",
       "class": null,
       "status": "0",
@@ -2753,7 +2753,7 @@
       "explanation": null
     },
     {
-      "gloss": "let's",
+      "gloss": "let`s",
       "type": "grammatical",
       "class": null,
       "status": "0",
@@ -3009,7 +3009,7 @@
       "explanation": null
     },
     {
-      "gloss": "that's",
+      "gloss": "that`s",
       "type": "grammatical",
       "class": "particle_semantics",
       "status": "0",
@@ -3846,7 +3846,7 @@
       "class": "noun",
       "status": "?",
       "change_to": null,
-      "explanation": "not exactly 'way'. Maybe use uderscores instead of dots in things like \"in.other.way\"?"
+      "explanation": "not exactly `way`. Maybe use uderscores instead of dots in things like \"in.other.way\"?"
     },
     {
       "gloss": "blabber1",
@@ -3862,7 +3862,7 @@
       "class": "definiteness",
       "status": "0",
       "change_to": "indef",
-      "explanation": "articles shouldn't be translated with lexemes"
+      "explanation": "articles shouldn`t be translated with lexemes"
     },
     {
       "gloss": "hort",
@@ -3929,7 +3929,7 @@
       "explanation": null
     },
     {
-      "gloss": "god's",
+      "gloss": "god`s",
       "type": "lexical",
       "class": null,
       "status": "0",

@@ -180,7 +180,7 @@ def create_formula(cand_form: str, lang, constr):
 
 def process_variation(row_n: int, dat: pd.DataFrame, change: dict) -> (str, str, list[dict]):
 
-    variation = dat.variation[row_n].strip()
+    variation = dat.variation[row_n].strip().replace("'","`")
     constituents = [const.strip() for const in re.split(" | |=", variation)]
     constituents_pretty = [re.sub('\.|-|∅', '', constituent) for constituent in constituents]
     
@@ -191,7 +191,7 @@ def process_variation(row_n: int, dat: pd.DataFrame, change: dict) -> (str, str,
     else:
         lemmas_aligned = [None for cp in constituents_pretty]
 
-    glossed = dat.glosses[row_n].strip()
+    glossed = dat.glosses[row_n].strip().replace("'","`")
     if glossed != '':
         glossed_constituents = [glossed_cost.strip() for glossed_cost in re.split(" | |=", glossed)]
         try:
@@ -231,58 +231,71 @@ def process_variation(row_n: int, dat: pd.DataFrame, change: dict) -> (str, str,
                      } for i, cp in enumerate(constituents_pretty)]
     return variation, constituents
 
-def create_glossing(mark_cand: str, gl_cand: str, lang, gloss_types: dict, gloss_classes: dict):
-    
-    # checking if the type already in GlossTypes
-    gl_type_cand = gloss_types[gl_cand]
+def create_glossing(marker_id: str, mark_cand: str, gl_cand: str, language_id, gl_type_cand: str, gl_class_cand: str):
+
+        # checking if the type already in GlossTypes
     gl_type = session.query(GlossTypes).filter(GlossTypes.gloss_type==gl_type_cand).first()
-    
-    if gl_type is not None: #type exists
-        # checking if the entry in Glosses needs to be created
-        gl = session.query(Glosses).filter(Glosses.gloss==gl_cand, Glosses.glosstypes == gl_type).first()
-        if gl is not None: #gloss exists
-            #checking if the glossing needs to be created:
-                in_db =  session.query(Glossing).filter(Glossing.marker==mark_cand, Glossing.languages==lang, Glossing.glosses==gl).first()
-                if in_db is not None: #return glossing
-                    # print (f"This combination marker, gloss, and language ({mark_cand}, {gl_cand}, lang) already in Glossing")
-                    return in_db
-                    
-        else: #gloss does not exist (and hence neither the glossing)
-            #retrieving/creating the gloss class needed for creation of a new Gloss
-            gl_class_cand = gloss_classes[gl_cand]
-            gl_class = session.query(GlossClass).filter(GlossClass.gloss_class==gl_class_cand).first()
-            if gl_class is None:
-                gl_class = GlossClass(gloss_class=gl_class_cand)
-            # creating the new Gloss with an existing type
-            gl = Glosses(gloss=gl_cand, glossclass=gl_class, glosstypes = gl_type)
-    else: #type does not exist (and hence neither the gloss, or the glossing)
+    if gl_type is None: #type exists
         gl_type = GlossTypes(gloss_type=gl_type_cand)
-        gl_class_cand = gloss_classes[gl_cand]
-        gl_class = session.query(GlossClass).filter(GlossClass.gloss_class==gl_class_cand).first()
-        if gl_class is None:
-            gl_class = GlossClass(gloss_class=gl_class_cand)
+        session.add(gl_type)
+        session.commit()
+
+    gl_class = session.query(GlossClass).filter(GlossClass.gloss_class==gl_class_cand).first()
+    if gl_class is None:
+        gl_class = GlossClass(gloss_class=gl_class_cand)
+        session.add(gl_class)
+        session.commit()
+    
+    gl = session.query(Glosses).filter(Glosses.gloss==gl_cand, Glosses.glossclass==gl_class, Glosses.glosstypes==gl_type).first()
+    if gl is None:
         gl = Glosses(gloss=gl_cand, glossclass=gl_class, glosstypes = gl_type)
     
     glossing = Glossing(glosses=gl,
-                        languages=lang, 
-                        marker=mark_cand)
+                        language_id=language_id, 
+                        marker=mark_cand,
+                        marker_id=marker_id
+                        )
     session.add(glossing)
     session.commit()
+    glossing_id = glossing.glossing_id
     
-    return glossing
+    return glossing_id
 
 def create_glossings(glossed_markers_aligned: list[dict], lang, gloss_types: dict, gloss_classes: dict):
     #creating Glossings from a dict of markers
     if glossed_markers_aligned != None:
         # print("starting ")
         glossings = list()
+        language_id = lang.language_id
         for glossed_marker in glossed_markers_aligned:
-            glossings_new = [create_glossing(glossed_marker["marker"], gloss_cand, lang, gloss_types, gloss_classes)
+            marker = glossed_marker["marker"]
+            glosses = glossed_marker["glosses"]
+            stmt = f"""SELECT glossing.marker_id, array_agg(glosses.gloss), array_agg(glossing.glossing_id)
+                                                  FROM public.glossing glossing JOIN public.glosses glosses ON (glossing.gloss_id = glosses.gloss_id)
+                                                  WHERE glossing.marker = '{marker}' AND glossing.language_id = {language_id}
+                                                  GROUP BY glossing.marker_id
+                                                  ORDER BY glossing.marker_id"""
+            markers_in_glossing = con.execute(text(stmt)).all()
+            if markers_in_glossing != []:
+                glosses_in_db =  [set(marker_in_glossing._tuple()[1]) for marker_in_glossing in markers_in_glossing]
+                try: #if success, this distinct marker already exists
+                    i = glosses_in_db.index(set(glosses))
+                    glossing_ids = markers_in_glossing[i]._tuple()[2]
+                    glossings.extend(glossing_ids)
+                    continue
+                except: #if insucess, new maker needs to be added
+                    last_marker_id = markers_in_glossing[-1][0]
+                    marker_id = last_marker_id + 1
+                    glossings_new = [create_glossing(marker_id, glossed_marker["marker"], gloss_cand, language_id, gloss_types[gloss_cand], gloss_classes[gloss_cand])
                          for gloss_cand in glossed_marker["glosses"]]
-            glossings.extend(glossings_new)
+                    glossings.extend(glossings_new)
+            else:
+                glossings_new = [create_glossing(1, glossed_marker["marker"], gloss_cand, language_id, gloss_types[gloss_cand], gloss_classes[gloss_cand])
+                         for gloss_cand in glossed_marker["glosses"]]
         return glossings
 
 def create_constituent(constituent_dict: dict, lang, gloss_types:dict, gloss_classes: dict):
+    language_id = lang.language_id
     const_cand = constituent_dict["constituent"]
     lemma_cand = constituent_dict["lemma"]
     markers = constituent_dict["markers"]
@@ -298,25 +311,30 @@ def create_constituent(constituent_dict: dict, lang, gloss_types:dict, gloss_cla
         l = None
     #checking if this constituent already exists
     const = session.query(Constituents).filter(Constituents.constituent == const_cand, 
-                                                    Constituents.languages == lang,
+                                                    Constituents.language_id == language_id,
                                                     Constituents.lemmas == l
                                                     ).first()
     if const is None: # creating a new constituent
         full_gloss = constituent_dict["full_gloss"]
-        const = Constituents(constituent=const_cand, languages=lang, lemmas=l, glossed=full_gloss)
+        const = Constituents(constituent=const_cand, language_id=language_id, lemmas=l, glossed=full_gloss)
         # , constituents2glossing_collection = glossings
         session.add(const)
         session.commit()
 
-    if glossings is not None:
-        for gl in glossings:
-            c2g = session.query(Constituents2Glossing).filter(Constituents2Glossing.constituents == const, Constituents2Glossing.glossing == gl).first()
-            if c2g is None:
-                c2g = Constituents2Glossing(constituents = const, glossing = gl)
-                session.add(c2g)
-                session.commit()
 
-    return const
+        if glossings is not None:
+            for gl in glossings:
+                c2g = Constituents2Glossing(constituents = const, glossing_id = gl)
+                session.add(c2g)
+                try:
+                    session.commit()
+                except Exception as ex:
+                    print(type(ex))
+                    session.rollback()
+
+    constituent_id = const.constituent_id
+
+    return constituent_id
 
 def create_variation(var_cand: str, form, main, synt_cand: str, inton_cand: str):
     var_cand = var_cand.strip()
@@ -367,9 +385,9 @@ def create_var2const(var, consts: list):
     for const in consts:
         var2const = session.query(Variation2Constituents).filter(
             Variation2Constituents.variations == var,
-            Variation2Constituents.constituents == const).first()
+            Variation2Constituents.constituent_id == const).first()
         if var2const is None:
-            var2const = Variation2Constituents(variations = var, constituents = const)
+            var2const = Variation2Constituents(variations = var, constituent_id = const)
             session.add(var2const)
             session.commit()
 
@@ -461,46 +479,19 @@ def main(dat: pd.DataFrame):
 
 # main(unpickle_df())
 
-@my_timer
-def get_all_constituents() -> list:
-    # constituents_ids = con.execute(text("SELECT constituents.constitent_id"))
-    constituents = con.execute(text("""
-                                SELECT constituent, full_gloss, lang, lemma, json_agg(json_build_object('marker', markers, 'glosses', glosses)) FROM
-                                (SELECT constituents.constituent as constituent, 
-                                    constituents.glossed as full_gloss,
-                                    languages.language as lang, 
-                                    lemmas.lemma as lemma,
-                                    glossing.marker as markers,
-                                    min(constituents2glossing.constituents2glossing_id) as min_constituents2glossing_id,
-                                    json_agg(glosses.gloss ORDER BY constituents2glossing.constituents2glossing_id) as glosses
-                                    
-                                FROM public.constituents constituents JOIN public.languages languages ON (constituents.language_id = languages.language_id)
-                                    LEFT JOIN public.lemmas lemmas ON (constituents.lemma_id = lemmas.lemma_id)
-                                    LEFT JOIN public.constituents2glossing constituents2glossing ON (constituents2glossing.constituent_id = constituents.constituent_id)
-                                    JOIN public.glossing glossing ON (constituents2glossing.glossing_id = glossing.glossing_id)
-                                    LEFT JOIN public.glosses glosses ON (glossing.gloss_id = glosses.gloss_id)
-                                GROUP BY constituents.constituent, constituents.glossed, languages.language, lemmas.lemma, glossing.marker
-                                ORDER BY constituents.constituent, min_constituents2glossing_id
-                                    )
-                                GROUP BY constituent, full_gloss, lang, lemma
-                                    
-                                
-                                    """
-                                    )).all()
-    constituents = [tuple(row) for row in constituents]
-    # glosses = con.
-    # glossings = 
-    return constituents
 
+
+@my_timer
 def get_all_constituents_strings() -> list:
     # constituents_ids = con.execute(text("SELECT constituents.constitent_id"))
     constituents = con.execute(text("""
                                 SELECT constituent, full_gloss, lang, lemma, STRING_AGG(markers, '-'), STRING_AGG(glosses, '-') FROM
                                 (SELECT constituents.constituent as constituent, 
+                                    constituents.constituent_id as id,
                                     constituents.glossed as full_gloss,
-                                    languages.language as lang, 
+                                    languages.language as lang,
                                     lemmas.lemma as lemma,
-                                    glossing.marker as markers,
+                                    CONCAT(glossing.marker, glossing.marker_id) as markers,
                                     min(constituents2glossing.constituents2glossing_id) as min_constituents2glossing_id,
                                     STRING_AGG(glosses.gloss, '.' ORDER BY constituents2glossing.constituents2glossing_id) as glosses
                                     
@@ -509,10 +500,11 @@ def get_all_constituents_strings() -> list:
                                     LEFT JOIN public.constituents2glossing constituents2glossing ON (constituents2glossing.constituent_id = constituents.constituent_id)
                                     LEFT JOIN public.glossing glossing ON (constituents2glossing.glossing_id = glossing.glossing_id)
                                     LEFT JOIN public.glosses glosses ON (glossing.gloss_id = glosses.gloss_id)
-                                GROUP BY constituents.constituent, constituents.glossed, languages.language, lemmas.lemma, glossing.marker
+                                GROUP BY constituents.constituent, constituents.constituent_id, constituents.glossed, languages.language, lemmas.lemma, markers
                                 ORDER BY constituents.constituent, min_constituents2glossing_id
                                     )
-                                GROUP BY constituent, full_gloss, lang, lemma
+                                GROUP BY constituent, id, full_gloss, lang, lemma
+                                ORDER BY lang, constituent, id
                                     
                                 
                                     """
