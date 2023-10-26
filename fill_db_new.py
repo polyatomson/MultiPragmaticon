@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine, text
-from sqlalchemy import select, insert
+from sqlalchemy import select, insert, func
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.automap import automap_base
 import gspread
@@ -12,6 +12,7 @@ import urllib
 import pickle
 import json
 import time
+from typing import Optional
 
 def my_timer(func): #timer wrapper
 
@@ -292,6 +293,7 @@ def create_glossings(glossed_markers_aligned: list[dict], lang, gloss_types: dic
             else:
                 glossings_new = [create_glossing(1, glossed_marker["marker"], gloss_cand, language_id, gloss_types[gloss_cand], gloss_classes[gloss_cand])
                          for gloss_cand in glossed_marker["glosses"]]
+                glossings.extend(glossings_new)
         return glossings
 
 def create_constituent(constituent_dict: dict, lang, gloss_types:dict, gloss_classes: dict):
@@ -445,12 +447,73 @@ def create_inner_structure(dat_inner_structure: str, form):
     return True
 
 
+def get_unique_values_single(colname_dat, dat) -> list:
+    unique_values = [text.strip() for text in dat[colname_dat].unique() if text != '']
+    return unique_values
+
+def get_unique_values_multiple(colname_dat, dat) -> list:
+    combs = [x.split('|') for x in dat[colname_dat].unique() if x != '']
+    unique_values = set([item.strip() for sublist in combs for item in sublist if item != ''])
+    unique_values = set([': '.join([part.strip() for part in v.split(':')]) for v in unique_values]) #to account for inconsistencies in the annotation
+    return list(unique_values)
+
+def get_new_values(unq_v_fnc, colname_dat: str, column_n, dat: pd.DataFrame) -> list:
+    unique_values = unq_v_fnc(colname_dat, dat)
+    stmt = select(column_n)
+    in_db = session.scalars(stmt).fetchall()
+    unique_values_new = [uv for uv in unique_values if uv not in in_db]
+    return unique_values_new
+
+def update_unique_values(unique_values_new: list, table_n, column_n_str: str) -> None:
+    to_db = [{column_n_str:uvn} for uvn in unique_values_new]
+    if to_db != []:
+         session.execute(insert(table_n), to_db)
+    session.commit()
+
+def create_examples(ex, ex_en) -> Optional[list[int]]:
+    examples = ex.strip()
+    null_empty_str = lambda x:None if x == '' else x
+    if ex != '':
+        exs = [ex.strip() for example in examples for ex in example.split("|")]
+        exs_en = [null_empty_str(ex.strip()) for example in ex_en for ex in example.split("|")]
+        ex_ids = list()
+        for i, ex in enumerate(exs):
+            try:
+                session.execute(insert(Examples).returning(ex_id), {"example": ex, "translation": exs_en})
+                session.commit()
+                ex_id = session.scalar(select(func.max(Examples.example_id)))
+                ex_ids.append(ex_id)
+            except:
+                continue
+        return ex_ids
+
+    else:
+        return None
+
+def create_frames(prag_cand:str, sem_cands:list[str], var_id: int):
+    prag_id = session.scalar(select(Pragmatics.pragmatics_id).where(Pragmatics.pragmatics == prag_cand))
+    for sem_cand in sem_cands:
+        sem_id = session.scalar(select(Semantics.semantics_id).where(Semantics.semantics == sem_cand))
+        frame_id = session.scalar(select(Frames.frame_id).where(Frames.semantics_id == sem_id, Frames.pragmatics_id == prag_id))
+        if frame_id is None:
+            session.execute(insert(Frames), {'semantics_id': sem_id, 'pragmatics_id': prag_id})
+            session.commit()
+            frame_id = session.scalar(select(func.max(Frames.frame_id)))
+            # print()
+    fr2var_indb = session.scalar(select(Frame2Var).where(Frame2Var.frame_id == frame_id, Frame2Var.variation_id == var_id))
+    if fr2var_indb is None:
+        session.execute(insert(Frame2Var), {'frame_id': frame_id, 'variation_id': var_id})
+        session.commit()
+
 @my_timer
 def main(dat: pd.DataFrame):
     session = Session(engine)
     row_count = len(dat.values)
+    null_empty_str = lambda x:None if x == '' else x
     # start = time.time()
     gloss_types, gloss_classes, change = import_gloss_dict() # import the glosses annotations
+    update_unique_values(get_new_values(get_unique_values_single,'pragmatics', Pragmatics.pragmatics, dat), Pragmatics, 'pragmatics')
+    update_unique_values(get_new_values(get_unique_values_multiple, 'semantics', Semantics.semantics, dat), Semantics, 'semantics')
     for rc in range(row_count+1):    
         try:
             validate_row(rc, dat)
@@ -471,19 +534,25 @@ def main(dat: pd.DataFrame):
         consts = [create_constituent(const, lang, gloss_types, gloss_classes) for const in constituents_dict] # create Constituents and the dependent tables, and establish connections between them
         var = create_variation(var_cand, form, dat.main[rc], dat.syntax[rc], dat.intonation[rc]) #create Variations
         create_var2const(var, consts) # establish many-to-many relations between variations and constituents
+        var_id = var.variation_id
+        pragm_cand =  null_empty_str(dat.pragmatics[rc])
+        sem_cands = [null_empty_str(m.strip()) for m in dat.semantics[rc].split('|')]
+        create_frames(pragm_cand, sem_cands, var_id)
+
+
+
         session.flush()
     
     session.close()
     # end = time.time()
     # print("The entire table data inserted in :", (end-start), "s")
 
-# main(unpickle_df())
+main(unpickle_df())
 
 
 
 @my_timer
 def get_all_constituents_strings() -> list:
-    # constituents_ids = con.execute(text("SELECT constituents.constitent_id"))
     constituents = con.execute(text("""
                                 SELECT constituent, full_gloss, lang, lemma, STRING_AGG(markers, '-'), STRING_AGG(glosses, '-') FROM
                                 (SELECT constituents.constituent as constituent, 
@@ -491,13 +560,19 @@ def get_all_constituents_strings() -> list:
                                     constituents.glossed as full_gloss,
                                     languages.language as lang,
                                     lemmas.lemma as lemma,
-                                    CONCAT(glossing.marker, glossing.marker_id) as markers,
                                     min(constituents2glossing.constituents2glossing_id) as min_constituents2glossing_id,
-                                    STRING_AGG(glosses.gloss, '.' ORDER BY constituents2glossing.constituents2glossing_id) as glosses
+                                    STRING_AGG(glosses.gloss, '.' ORDER BY constituents2glossing.constituents2glossing_id) as glosses,
                                     
-                                FROM public.constituents constituents JOIN public.languages languages ON (constituents.language_id = languages.language_id)
+                                    CASE
+                                    WHEN glossing.marker IS NOT NULL THEN CONCAT(glossing.marker, glossing.marker_id)
+                                    ELSE NULL
+                                    END
+                                    AS markers
+                                    
+                                FROM public.constituents2glossing constituents2glossing 
+                                    FULL OUTER JOIN public.constituents constituents ON (constituents2glossing.constituent_id = constituents.constituent_id)
+                                    LEFT JOIN public.languages languages ON (constituents.language_id = languages.language_id)
                                     LEFT JOIN public.lemmas lemmas ON (constituents.lemma_id = lemmas.lemma_id)
-                                    LEFT JOIN public.constituents2glossing constituents2glossing ON (constituents2glossing.constituent_id = constituents.constituent_id)
                                     LEFT JOIN public.glossing glossing ON (constituents2glossing.glossing_id = glossing.glossing_id)
                                     LEFT JOIN public.glosses glosses ON (glossing.gloss_id = glosses.gloss_id)
                                 GROUP BY constituents.constituent, constituents.constituent_id, constituents.glossed, languages.language, lemmas.lemma, markers
@@ -508,17 +583,16 @@ def get_all_constituents_strings() -> list:
                                     
                                 
                                     """
-                                    )).all()
+                                    )).fetchall()
     constituents = [tuple(row) for row in constituents]
     # glosses = con.
     # glossings = 
+    all_const = {"constituents":get_all_constituents_strings()}
+    with open('all_constituents.json', 'w', encoding='utf-8') as f:
+        json.dump(all_const, f, indent = 2, ensure_ascii=False)
+
     return constituents
 
 
-
-# all_const = get_all_constituents()
-all_const = {"constituents":get_all_constituents_strings()}
-with open('all_constituents.json', 'w', encoding='utf-8') as f:
-    json.dump(all_const, f, indent = 2, ensure_ascii=False)
 
 con.close()

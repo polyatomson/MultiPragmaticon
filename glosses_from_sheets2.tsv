@@ -1,0 +1,517 @@
+gloss	type	class_	ok	change_to	explanation
+conj	grammatical	null	0	specific_lexical_gloss	conjunction
+dir	grammatical	case	1		direct object
+ins	grammatical	case	1		instrumental
+gen	grammatical	case	1		genitive
+nom	grammatical	case	1		nominative
+loc	grammatical	case	1		locative
+abl	grammatical	case	1		ablative
+GEN	grammatical	case	0	gen	duplicate
+acc	grammatical	case	1		accusative
+inst	grammatical	case	0	ins	duplicate
+voc	grammatical	case	1		vocative
+dat	grammatical	case	1		dative
+def	grammatical	definiteness	1		definite article
+sprl	grammatical	degree	1		superlative
+sup	grammatical	degree	0	sprl	duplicate
+comp	grammatical	POS	1		complementizer
+cmpr	grammatical	degree	1		comparative marker
+n	grammatical	gender	1		neutral
+m	grammatical	gender	1		masculine
+f	grammatical	gender	1		feminine
+nsg	grammatical	gender_number	0	n.sg	combination
+msg	grammatical	gender_number	0	m.sg	combination
+fsg	grammatical	gender_number	0	f.sg	combination
+q	grammatical	interrogative	1		polar question marker
+qp	grammatical	interrogative	0	q	polar question marker
+subj	grammatical	mood	1		subjunctive
+imp	grammatical	mood	1		imperative
+proh	grammatical	mood	1		prohibitive
+cond	grammatical	mood	1		conditional
+oblg	grammatical	mood	1		obligative
+opt	grammatical	mood	1		optative
+int	grammatical	None	1		internal (сам)
+neg	grammatical	None	1		negation marker (excluding NO as an answer)
+refl	grammatical	pronoun_semantics	1		reflexive
+poss3	grammatical	pronoun_semantics	0	poss.3	combination
+prs2sg	grammatical	personal_number	0	prs.2.sg	combination
+carit	grammatical	case	1		caritive
+partititve	grammatical	None	0	prtv	partitive
+caus	grammatical	word_formation	1		causative
+ptc	grammatical	POS	0	ptcp	duplicate
+poss	grammatical	pronoun_semantics	1		possessive marker
+sg	grammatical	number	1		singular
+pl	grammatical	number	1		plural
+SG	grammatical	number	0	sg	duplicate
+(pl)	grammatical	number	0	pl	duplicate
+foc	grammatical	particle_semantics	1		focus
+deix	grammatical	particle_semantics	1		deitic
+contop	grammatical	particle_semantics	1		contrasted topic
+dem	grammatical	pronoun_semantics	1		demonstrative
+dem2	grammatical	pronoun_semantics	1		demonstrative
+cncs2	grammatical	particle_semantics	1		concessive (maybe numbers are not needed?)
+emph	grammatical	particle_semantics	1		emphatic
+prox	grammatical	particle_semantics	1		proximate (deixis)
+cncs1	grammatical	particle_semantics	1		concessive (maybe numbers are not needed?)
+top	grammatical	particle_semantics	1		topic
+cncs	grammatical	particle_semantics	1		concessive
+dem1	grammatical	pronoun_semantics	1		demonstrative
+dem3	grammatical	pronoun_semantics	1		demonstrative
+dist	grammatical	particle_semantics	1		distant (deixis)
+contr	grammatical	particle_semantics	1		constrastive
+juxt	grammatical	particle_semantics	1		juxtapositional
+2sg(2pl)	grammatical	person_number	0	2.sg	combination
+3sg	grammatical	person_number	0	3.sg	combination
+2pl	grammatical	person_number	0	2.pl	combination
+2sg	grammatical	person_number	0	2.sg	combination
+1pl	grammatical	person_number	0	1.pl	combination
+3SG	grammatical	person_number	0	3.sg	combination
+ptcl	grammatical	POS	0	part	duplicate
+(prt)	grammatical	POS	0	part	duplicate
+interj	grammatical	POS	0	intj	duplicate
+intj	grammatical	POS	1		interjection
+pron	grammatical	POS	1		pronoun ? needed? inconsistencies: sometimes annotated and sometimes not
+aux	grammatical	POS	1		auxilary verb
+prep	grammatical	POS	0	specific_lexical_gloss	preposition
+prt	grammatical	POS	0	part	duplicate
+cop	grammatical	POS	1		copula verb
+part	grammatical	POS	1		particle
+auxfut	grammatical	tense	0	aux.fut	combination
+impf	grammatical	tense	1		imperfect (past)
+pastp	grammatical	tense	0	pst.ptcp	combination
+psr	grammatical	tense	1	prs	typo
+prs	grammatical	tense	1		present tense
+PRS	grammatical	tense	0	prs	duplicate
+fut	grammatical	tense	1		future tense
+pst	grammatical	tense	1		past tense
+pres	grammatical	tense	0	prs	duplicate
+auxcond	grammatical	tense	0	aux.cond	combination
+pred	grammatical	verb_form	1		predicative
+ptcp	grammatical	verb_form	1		participle
+pts	grammatical	verb_form	0	ptcp	typo
+ger	grammatical	verb_form	1		gerundive
+inf	grammatical	verb_form	1		infinitive
+pass	grammatical	word_formation	1		passive marker
+sbst	grammatical	word_formation	1		nominalizer
+verb	grammatical	word_formation	0	vbz	verbalizer
+adv	grammatical	word_formation	0	advr	adverbializer
+yes	lexical	answering_particle	1		
+no	lexical	answering_particle	1		
+and	lexical	conjunction			
+but	lexical	conjunction			
+bet	lexical	verb		verb	
+oh	grammatical	interjection	0	intj	interjection
+who	lexical	interrogative			
+how	lexical	interrogative			
+why	lexical	interrogative			
+miracle	lexical	noun			
+put	lexical	verb			
+background	lexical	noun			
+price	lexical	noun			
+also	lexical	adverb			
+which	lexical	interrogative			
+cholera	lexical	noun			
+everyone	lexical	quantor			
+think	lexical	verb			
+understand	lexical	verb			
+important	lexical	adjective			
+any	lexical	NPI			
+lead	lexical	verb			
+big	lexical	adjective			
+chance	lexical	noun			
+about	lexical	preposition			
+quiet	lexical	adjective			
+joke	lexical	verb			
+sorely	lexical	adverb			
+baloney	lexical	noun			
+different	lexical	adjective			
+again	lexical	adverb			
+story	lexical	noun			
+curse	lexical	noun			
+something	lexical	pronoun			
+good	lexical	adjective			
+suffice	lexical	verb			
+order	lexical	noun			
+difference	lexical	noun			
+okay	lexical	None	0	alright	russian ladno
+time	lexical	noun			
+end	lexical	noun			
+healthy	lexical	adjective			
+wait	lexical	verb			
+hold	lexical	verb			
+relevance	lexical	noun			
+this	lexical	pronoun	?	dem.prox	
+essence	lexical	noun			
+must	lexical	verb			
+talk	lexical	verb			
+certainty	lexical	noun			
+ridiculous	lexical	adjective			
+quite	lexical	adverb			
+worry	lexical	verb			
+keep	lexical	verb			
+straight	lexical	adjective			
+repentance	lexical	noun			
+answer	lexical	noun			
+like	lexical	conjunction			
+become	lexical	verb			
+blabber	lexical	verb			
+far	lexical	adjective			
+holy	lexical	adjective			
+judge	lexical	verb			
+baptize	lexical	verb	1		
+worth	lexical	verb	0	be_worth	
+condition	lexical	noun			
+neither	lexical	NPI			
+wrong	lexical	adjective			
+peace	lexical	noun			
+listen	lexical	verb			
+where	lexical	interrogative			
+dangerous	lexical	adjective			
+cover	lexical	verb	0	close	poor choice of gloss in Russian
+fuck	lexical	verb			
+normal	lexical	adjective			
+do	lexical	verb			
+certain	lexical	adjective			
+bullshit	lexical	noun			
+beg	lexical	verb			
+need	lexical	noun			
+cannot	grammatical	verb	0	proh.pred	was used in Russian for neljzja
+excess	lexical	noun			
+possibility	lexical	noun			
+dispute	lexical	noun			
+nohow	lexical	quantor			
+now	lexical	adverb			
+from_now_on	lexical	adverb			
+tharefore	lexical	conjunction	0	therefore	typo
+method	lexical	noun			
+whole	lexical	adjective			
+mean	lexical	verb			
+pay_attention	lexical	verb			
+before	lexical	preposition			
+difficult	lexical	adjective			
+day	lexical	noun			
+agreeing	lexical	None	0	agreement	-
+honor	lexical	noun			
+luck	lexical	noun			
+theory	lexical	noun			
+easy	lexical	adjective			
+problem	lexical	noun			
+joy	lexical	noun			
+himself	lexical	pronoun			
+forbid	lexical	verb			
+stop	lexical	verb			
+close	lexical	verb			
+wise	lexical	adjective			
+flatter	lexical	verb			
+shit	lexical	noun			
+reason	lexical	noun			
+roll	lexical	verb			
+mother	lexical	noun			
+mislead	lexical	verb			
+little	lexical	adjective			
+avoir	lexical	verb	0	have	glosses should be in English
+give	lexical	verb			
+sound	lexical	verb			
+speech	lexical	noun			
+if	lexical	conjunction			
+corpse	lexical	noun			
+treasure	lexical	noun			
+exactly	lexical	adverb			
+vbz	grammatical	word_formation	1		verbalizer
+add	lexical	verb			
+word	lexical	noun			
+possible	lexical	adjective			
+world	lexical	noun			
+well	lexical	adverb			
+the	grammatical	definiteness	0	def	definite article (also, the number and gender should be added for Romance)
+miss	lexical	verb			
+anything	lexical	NPI			
+fixable	lexical	adjective			
+even	lexical	adverb			
+go	lexical	verb			
+with	lexical	preposition			
+enim	grammatical	particle_semantics			enimitive (Panov) - uncontroversial information
+meaning	lexical	verb			
+dear	lexical	adjective			
+get	lexical	verb			
+complaint	lexical	noun			
+refuse	lexical	verb			
+surely	lexical	adverb			
+view	lexical	noun			
+complicate	lexical	verb			
+happen	lexical	verb			
+forget	lexical	verb			
+hard	lexical	adjective			
+concern	lexical	verb			
+God's	lexical	None	0	god.poss	combination
+allow	lexical	verb			
+woman	lexical	noun			
+hear	lexical	verb			
+so	lexical	pronoun			
+there	lexical	adverb			
+really	lexical	adverb			
+such	lexical	pronoun			
+mock	lexical	verb			
+option	lexical	noun			
+truth	lexical	noun			
+art	grammatical	definiteness	0	indef	used in Turkish part of the table for bir (indef article)
+fit	lexical	verb			
+exclude	lexical	verb			
+gledati	lexical	None	0	look	glosses should be in English
+theme	lexical	noun			
+scary	lexical	adjective			
+suppose	lexical	verb			
+take	lexical	verb			
+every	lexical	quantor			
+devil	lexical	noun			
+today	lexical	adverb			
+fun	lexical	noun			
+recieve	lexical	verb			
+great	lexical	adjective			
+pleasure	lexical	noun			
+stroke	lexical	noun			
+thing	lexical	noun			
+possib	grammatical	None	1		modal possibility
+rather	lexical	adverb			
+surprising	lexical	adjective			
+genre	lexical	noun			
+count	lexical	verb			
+head	lexical	noun			
+than	lexical	conjunction			
+case	lexical	noun			
+Gracious	lexical	None	0	gracious	duplicate
+all	lexical	quantor			
+they	lexical	pronoun	?	3.pl	
+advice	lexical	noun			
+everything	lexical	quantor			
+that`s	grammatical	particle_semantics	0	deix.part	deix.part seems suitable
+hope	lexical	verb			
+link	lexical	noun	0	connection	duplicate
+always	lexical	quantor			
+ever	lexical	NPI			
+shame	lexical	noun			
+surprise	lexical	noun			
+grind	lexical	verb			
+yours	lexical	pronoun	0	your	
+look	lexical	verb			
+devil2	lexical	noun			
+fool	lexical	noun			
+serious	lexical	adjective			
+not	lexical	None	0	neg	
+burn	lexical	verb			
+fall	lexical	verb			
+use	lexical	verb			
+your	lexical	pronoun	?	2.sg.poss	
+necessary	lexical	adjective			
+probably	lexical	adverb			
+too	lexical	adverb			
+relax	lexical	verb			
+turn	lexical	noun			
+funny	lexical	adjective			
+naturally	lexical	adverb			
+accept	lexical	verb			
+lord	lexical	noun			
+stupid	lexical	adjective			
+empty	lexical	adjective			
+from	lexical	preposition			
+tongue	lexical	noun			
+beat	lexical	verb			
+life	lexical	noun			
+much	lexical	quantifier	1		
+famous	lexical	adjective			
+saint	lexical	adjective			
+more	lexical	quantifier	0	much.cmpr	
+other	lexical	adjective			
+none	lexical	quantor			
+may	lexical	verb			
+hand	lexical	noun			
+obstacle	lexical	noun			
+lie	lexical	verb			
+at_all	lexical	NPI			
+sorry	lexical	routine			
+spit	lexical	verb			
+ask	lexical	verb			
+try	lexical	verb			
+you	lexical	pronoun	?	2.sg	
+can	lexical	verb			
+thought	lexical	noun			
+bosh	lexical	noun			
+pity	lexical	noun			
+if_only	grammatical	mood	0	opt	better described with a grammatical gloss
+very	lexical	quantifier			
+let's	grammatical	None	0	hort	better a grammatical gloss
+light	lexical	noun			
+protest	lexical	verb			
+what	lexical	interrogative			
+here	lexical	adverb			
+soon	lexical	adverb			
+lot	lexical	quantifier	0	much	
+conversation	lexical	noun			
+speak	lexical	verb			
+start	lexical	verb			
+force	lexical	noun			
+dire	lexical	None	0	say	wrong language
+thank_you	lexical	routine			
+obviously	lexical	adverb			
+say	lexical	verb			
+although	lexical	conjunction			
+alright	lexical	adjective	1		
+unlikely	lexical	adverb			
+absolutely	lexical	adverb			
+yet	lexical	adverb			
+resentment	lexical	noun			
+come	lexical	verb			
+precisely	lexical	adverb			
+occasion	lexical	noun			
+when	lexical	interrogative			
+money	lexical	noun			
+save	lexical	verb			
+completely	lexical	adverb			
+simple	lexical	adjective			
+please	lexical	routine			
+soul	lexical	noun			
+have	lexical	verb			
+that's	grammatical	particle_semantics	0	deix.part	deix.part seems suitable
+connection	lexical	noun			
+drive	lexical	verb			
+news	lexical	noun			
+believe	lexical	verb			
+god	lexical	noun			
+chew	lexical	verb			
+incident	lexical	noun			
+crazy	lexical	adjective			
+nonsense	lexical	noun			
+real	lexical	adjective			
+throw	lexical	verb			
+seriously	lexical	adverb			
+pray	lexical	verb			
+nothing	lexical	quantor			
+laugh	lexical	verb			
+smear	lexical	verb			
+jibberish	lexical	noun			
+business	lexical	noun			
+measure	lexical	noun			
+indeed	lexical	adverb			
+issue	lexical	noun			
+person	lexical	noun			
+near	lexical	adjective			
+fear	lexical	verb			
+idea	lexical	noun			
+suddenly	lexical	adverb			
+effect	lexical	noun			
+short	lexical	adjective			
+already	lexical	adverb			
+enough	lexical	adverb			
+truthful	lexical	adjective	0	true	
+comprehension	lexical	noun			
+doubt	lexical	noun			
+defend	lexical	verb			
+nobody	lexical	quantor			
+topic	lexical	noun			
+just	lexical	adverb			
+see	lexical	verb			
+appearance	lexical	noun			
+God	lexical	None	0	god	duplicate
+exact	lexical	adjective			
+clear	lexical	adjective			
+sure	lexical	adjective			
+cow	lexical	noun			
+brother	lexical	noun			
+wave	lexical	verb			
+course	lexical	noun			
+demon	lexical	noun			
+(only)	lexical	None	0	only	duplicate
+mercy	lexical	noun			
+imagine	lexical	verb			
+obvious	lexical	adjective			
+right	lexical	adjective			
+generally	lexical	adverb			
+mistake	lexical	noun			
+tell	lexical	verb			
+anyway	lexical	NPI			
+finally	lexical	adverb			
+blabber2	lexical	verb			
+true	lexical	adjective			
+my	lexical	pronoun	?		
+hide	lexical	verb			
+creature	lexical	noun			
+adjr	grammatical	word_formation	1		adjectivizer
+fact	lexical	noun			
+thank	lexical	verb			
+cut	lexical	verb			
+agree	lexical	verb			
+trouble	lexical	noun			
+arrive	lexical	verb			
+exactly2	lexical	adverb			
+he	lexical	pronoun	?	3.sg.m	
+two	lexical	numeral			
+without	lexical	preposition			
+hello	lexical	routine			
+question	lexical	noun			
+extraordinary	lexical	adjective			
+mind	lexical	noun			
+tale	lexical	noun			
+find	lexical	verb			
+value	lexical	noun			
+assume	lexical	verb			
+inconspicuous	lexical	adjective			
+few	lexical	quantifier			
+come_out	lexical	verb			
+hey	lexical	routine			
+be	lexical	verb			
+special	lexical	adjective			
+gledati	lexical	None	0	look	glosses should be in English
+want	lexical	verb			
+cost	lexical	verb	0	be_worth	
+know	lexical	verb			
+that	lexical	pronoun	?	one_of_grammatical_glosses: comp or dem.dist	
+possibly	lexical	adverb			
+only	lexical	adverb			
+similar	lexical	adjective			
+new	lexical	adjective			
+baptized	lexical	verb	0	baptize.ptcp	combination
+dream	lexical	verb			
+invent	lexical	verb			
+point	lexical	noun			
+another	lexical	adjective			
+kind	lexical	adjective			
+way	lexical	noun	?		not exactly 'way'. Maybe use uderscores instead of dots in things like "in.other.way"?
+blabber1	lexical	verb			
+a	grammatical	definiteness	0	indef	articles shouldn't be translated with lexemes
+hort	grammatical	mood	1		hortative
+be_worth	lexical	verb	2		
+importance	lexical	noun			
+care	lexical	verb			
+screw	lexical	verb			
+touch	lexical	verb			
+compliment	lexical	noun			
+gracious	lexical	adjective			
+god's	lexical	None	0	god.poss	combination
+never	lexical	NPI			
+one	lexical	numeral			
+1sg	grammatical	person_number	0	1.sg	combination
+to	lexical	preposition			
+under	lexical	preposition			
+by	lexical	preposition			
+on	lexical	preposition			
+for	lexical	preposition			
+of	lexical	preposition			
+at	lexical	preposition			
+in	lexical	preposition			
+against	lexical	preposition			
+I	lexical	pronoun	?		
+we	lexical	pronoun	?	1.pl	
+it	lexical	pronoun	?	3.sg.n	
+me	lexical	pronoun	0	I	
+i	lexical	pronoun	?		
+she	lexical	pronoun	?	3.sg.f	
+cont	grammatical	tense	1		continuos
+av	grammatical	verb_form	1		
+arch	other	None	1		archaic
+reduc	other	None	1		reduction
+red	other	None	0	reduc	duplication
+reduc	other	None	0	reduc	duplication
+1	grammatical	person	1		first person
+2	grammatical	person	1		second person
+3	grammatical	person	1		third person
+prtv	grammatical	case	1		partitive
